@@ -279,56 +279,6 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
             all_players[potential_winner_index[i]] = 1
     return all_players
 
-def determine_winner_straight(hands, all_players, potential_winner_index):
-    '''
-    Find out who wins in the situation of having players all having a straight or straight flush
-    Args:
-        key_index(int): the position of a card in a sorted handcard
-        hands(list): cards of those players which all have a straight or straight flush
-        all_players(list): all the players in this round, 0 for losing and 1 for winning or draw
-        potential_winner_index(list): the positions of those players with same highest hand_catagory in all_players
-    Returns:
-        [0, 1, 0]: player1 wins
-        [1, 0, 0]: player0 wins
-        [1, 1, 1]: draw
-        [1, 1, 0]: player1 and player0 draws
-    '''
-    highest_ranks = []
-    for hand in hands:
-        highest_rank = hand.STRING_TO_RANK[hand.best_five[-1][1]]  # cards are sorted in ascending order
-        highest_ranks.append(highest_rank)
-    max_highest_rank = max(highest_ranks)
-    for i_player in range(len(highest_ranks)):
-        if highest_ranks[i_player] == max_highest_rank:
-            all_players[potential_winner_index[i_player]] = 1
-    return all_players
-
-def determine_winner_four_of_a_kind(hands, all_players, potential_winner_index):
-    '''
-    Find out who wins in the situation of having players which all have a four of a kind
-    Args:
-        key_index(int): the position of a card in a sorted handcard
-        hands(list): cards of those players with a four of a kind
-        e.g. hands = [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']]
-        all_players(list): all the players in this round, 0 for losing and 1 for winning or draw
-        potential_winner_index(list): the positions of those players with same highest hand_catagory in all_players
-    Returns:
-        [0, 1, 0]: player1 wins
-        [1, 0, 0]: player0 wins
-        [1, 1, 1]: draw
-        [1, 1, 0]: player1 and player0 draws
-    '''
-    ranks = []
-    for hand in hands:
-        rank_1 = hand.STRING_TO_RANK[hand.best_five[-1][1]]  # rank of the four of a kind
-        rank_2 = hand.STRING_TO_RANK[hand.best_five[0][1]]  # rank of the kicker
-        ranks.append((rank_1, rank_2))
-    max_rank = max(ranks)
-    for i, rank in enumerate(ranks):
-        if rank == max_rank:
-            all_players[potential_winner_index[i]] = 1
-    return all_players
-
 def compare_hands(hands):
     '''
     Compare all palyer's all seven cards
