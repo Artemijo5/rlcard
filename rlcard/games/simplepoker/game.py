@@ -65,7 +65,7 @@ class SimplePokerGame:
         self.judger = Judger(self.np_random)
 
         # Deal cards to each  player to prepare for the first round
-        for i in range(2 * self.num_players):
+        for i in range(1 * self.num_players):
             self.players[i % self.num_players].hand.append(self.dealer.deal_card())
 
         # Initialize public cards
