@@ -48,7 +48,7 @@ class Hand:
             self.all_cards)
         
         
-        elif self._has_three():
+        if self._has_three():
             self.category = 4
             #Three of a Kind
             self.best_five = self._get_Three_of_a_kind_cards()
