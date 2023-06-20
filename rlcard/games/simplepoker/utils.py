@@ -229,7 +229,7 @@ def compare_ranks(position, hands, winner):
 
     '''
     assert len(hands) == len(winner)
-    RANKS = '23456789TJQKA'
+    RANKS = 'TJQKA'
     cards_figure_all_players = [None]*len(hands)  #cards without suit
     for i, hand in enumerate(hands):
         if winner[i]:
