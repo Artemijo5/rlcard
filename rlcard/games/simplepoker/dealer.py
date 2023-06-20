@@ -1,3 +1,5 @@
+from rlcard.games.base import Card
+
 def init_simple_deck():
     ''' Initialize a standard deck of 52 cards
 
