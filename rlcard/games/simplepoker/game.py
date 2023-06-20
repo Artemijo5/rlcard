@@ -136,7 +136,7 @@ class SimplePokerGame:
         if self.round.is_over():
             # For the first round, we deal 3 cards
             if self.round_counter == 0:
-                self.public_cards.append(self.dealer.deal_card())
+                #self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
 
