@@ -1,5 +1,11 @@
-from rlcard.utils.utils import init_standard_deck
+#from rlcard.utils.utils import init_standard_deck
+from rlcard.games.base import Card
 
+def init_standard_deck():
+    suit_list = ['S', 'H', 'D', 'C']
+    rank_list = ['A', 'T', 'J', 'Q', 'K']
+    res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
+    return res
 
 class LimitHoldemDealer:
     def __init__(self, np_random):
