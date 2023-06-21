@@ -22,7 +22,7 @@ class SimplePokerPlayer:
         self.status = PlayerStatus.ALIVE
 
         # The chips that this player has put in until now
-        self.in_chips = 0.5 # all players bet 0.5 chips before being dealt the initial card, according to exercise statement
+        self.in_chips = 0
 
     def get_state(self, public_cards, all_chips, legal_actions):
         """

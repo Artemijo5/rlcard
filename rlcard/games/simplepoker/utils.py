@@ -82,7 +82,7 @@ class Hand:
         '''
         Get cards by rank
         Args:
-            (list): # two hand cards + five public cards
+            (list): # 1 hand card + 2 public cards - changed from limit-holdem
         Return:
             card_group(list): cards after sort
             product(int):cards‘ type indicator
