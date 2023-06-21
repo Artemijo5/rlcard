@@ -21,8 +21,8 @@ class LimitHoldemGame:
         self.big_blind = 1 * self.small_blind
 
         # Raise amount and allowed times
-        self.raise_amount = self.big_blind
-        self.allowed_raise_num = 4
+        self.raise_amount = 2 * self.big_blind
+        self.allowed_raise_num = 2 # deemed to be so according to given rules
 
         self.num_players = num_players
 
