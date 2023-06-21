@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
-from rlcard.games.limitholdem import Game
+from rlcard.games.secondattempt import Game
 
 DEFAULT_GAME_CONFIG = {
         'game_num_players': 2,
