@@ -52,3 +52,8 @@ register(
     env_id='simple-poker',
     entry_point='rlcard.envs.simplepoker:SimplePokerEnv',
 )
+
+register(
+    env_id='secondattempt',
+    entry_point='rlcard.envs.simplepoker:SimplePokerEnv',
+)
