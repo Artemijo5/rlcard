@@ -28,7 +28,7 @@ class Hand:
 
     def _sort_cards(self):
         '''
-        Sort all the seven cards ascendingly according to RANK_LOOKUP
+        Sort all the 3 cards ascendingly according to RANK_LOOKUP
         '''
         self.all_cards = sorted(
             self.all_cards, key=lambda card: self.RANK_LOOKUP.index(card[1]))
@@ -178,8 +178,8 @@ class Hand:
                 Trip_cards += cards_by_rank.pop(i)[1:4]
                 break
 
-        Trip_cards += cards_by_rank.pop(-1)[1:2]
-        Trip_cards += cards_by_rank.pop(-1)[1:2]
+        #Trip_cards += cards_by_rank.pop(-1)[1:2]
+        #Trip_cards += cards_by_rank.pop(-1)[1:2]
         Trip_cards.reverse()
         return Trip_cards
 
@@ -197,9 +197,9 @@ class Hand:
                 One_Pair_cards += cards_by_rank.pop(i)[1:3]
                 break
 
-        One_Pair_cards += cards_by_rank.pop(-1)[1:2]
-        One_Pair_cards += cards_by_rank.pop(-1)[1:2]
-        One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
         One_Pair_cards.reverse()
         return One_Pair_cards
 
