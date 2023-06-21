@@ -22,7 +22,7 @@ class SimplePokerGame:
 
         # Raise amount and allowed times
         self.raise_amount = self.big_blind
-        self.allowed_raise_num = 4
+        self.allowed_raise_num = 1
 
         self.num_players = num_players
 
