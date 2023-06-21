@@ -39,9 +39,9 @@ class Hand:
         Evaluate all the seven cards, get the best combination catagory
         And pick the best five cards (for comparing in case 2 hands have the same Category) .
         """
-        if len(self.all_cards) != 7:
+        if len(self.all_cards) != 6:
             raise Exception(
-                "There are not enough 7 cards in this hand, quit evaluation now ! ")
+                "There are not enough 6 cards in this hand, quit evaluation now ! ")
 
         self._sort_cards()
         self.cards_by_rank, self.product = self._getcards_by_rank(
