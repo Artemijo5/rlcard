@@ -99,7 +99,7 @@ class SimplePokerJudger:
         assert len(in_chips) == len(winners)
         assert all(v == 0 or v == 1 for v in winners)
         assert sum(winners) >= 1  # there must be at least one winner
-        allocated = np.zeros(len(in_chips), dtype=int)
+        allocated = np.zeros(len(in_chips), dtype=float64)
         while any(v > 0 for v in in_chips):  # while there are still chips to allocate
             allocated_current_pot, in_chips = self.split_pot_among_players(in_chips, winners)
             allocated += allocated_current_pot  # element-wise addition
