@@ -73,7 +73,7 @@ class Hand:
         #elif self._has_two_pairs():
         #    self.category = 3
             #Two Pairs
-            self.best_five = self._get_Two_Pair_cards()
+        #    self.best_five = self._get_Two_Pair_cards()
         elif self._has_pair():
             self.category = 2
             #One Pair
