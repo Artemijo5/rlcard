@@ -47,33 +47,33 @@ class Hand:
         self.cards_by_rank, self.product = self._getcards_by_rank(
             self.all_cards)
 
-        if self._has_straight_flush():
-            self.category = 9
+        #if self._has_straight_flush():
+        #    self.category = 9
             #Straight Flush
-        elif self._has_four():
-            self.category = 8
+        #elif self._has_four():
+        #    self.category = 8
             #Four of a Kind
-            self.best_five = self._get_Four_of_a_kind_cards()
-        elif self._has_fullhouse():
-            self.category = 7
+        #    self.best_five = self._get_Four_of_a_kind_cards()
+        #elif self._has_fullhouse():
+        #    self.category = 7
             #Full house
-            self.best_five = self._get_Fullhouse_cards()
-        elif self._has_flush():
-            self.category = 6
+        #    self.best_five = self._get_Fullhouse_cards()
+        #elif self._has_flush():
+        #    self.category = 6
             #Flush
-            i = len(self.flush_cards)
-            self.best_five = [card for card in self.flush_cards[i-5:i]]
-        elif self._has_straight(self.all_cards):
-            self.category = 5
+        #    i = len(self.flush_cards)
+        #    self.best_five = [card for card in self.flush_cards[i-5:i]]
+        #elif self._has_straight(self.all_cards):
+        #    self.category = 5
             #Straight
-        elif self._has_three():
+        if self._has_three():
             self.category = 4
             #Three of a Kind
             self.best_five = self._get_Three_of_a_kind_cards()
-        elif self._has_two_pairs():
-            self.category = 3
+        #elif self._has_two_pairs():
+        #    self.category = 3
             #Two Pairs
-            self.best_five = self._get_Two_Pair_cards()
+        #    self.best_five = self._get_Two_Pair_cards()
         elif self._has_pair():
             self.category = 2
             #One Pair
