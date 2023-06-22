@@ -20,13 +20,13 @@ class LimitHoldemGame:
         self.ante = 0.5
 
         # Raise amount and allowed times
-        self.raise_amount = 1
+        self.raise_amount = 2 * self.ante
         self.allowed_raise_num = 2 # deemed to be so according to given rules
 
         self.num_players = num_players
 
         # Save betting history
-        self.history_raise_nums = [0 for _ in range(2)]
+        self.history_raise_nums = [0 for _ in range(4)]
 
         self.dealer = None
         self.players = None
@@ -93,7 +93,7 @@ class LimitHoldemGame:
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 
-        # Count the round. There are 2 rounds in each game.
+        # Count the round. There are 4 rounds in each game.
         self.round_counter = 0
 
         # Save the history for stepping back to the last state.
@@ -102,7 +102,7 @@ class LimitHoldemGame:
         state = self.get_state(self.game_pointer)
 
         # Save betting history
-        self.history_raise_nums = [0 for _ in range(2)]
+        self.history_raise_nums = [0 for _ in range(4)]
 
         return state, self.game_pointer
 
