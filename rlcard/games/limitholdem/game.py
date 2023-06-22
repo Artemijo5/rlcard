@@ -20,7 +20,7 @@ class LimitHoldemGame:
         self.ante = 0.5
 
         # Raise amount and allowed times
-        self.raise_amount = 2 * ante
+        self.raise_amount = 2 * self.ante
         self.allowed_raise_num = 2 # deemed to be so according to given rules
 
         self.num_players = num_players
