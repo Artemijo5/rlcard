@@ -146,10 +146,12 @@ class LimitHoldemGame:
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
 
             # For the following rounds, we deal only 1 card
-            elif self.round_counter <= 2:
-                self.public_cards.append(self.dealer.deal_card())
+            #elif self.round_counter <= 2:
+            #    self.public_cards.append(self.dealer.deal_card())
 
             # Double the raise amount for the last two rounds
             #if self.round_counter == 1:
