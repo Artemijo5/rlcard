@@ -26,7 +26,7 @@ class LimitHoldemGame:
         self.num_players = num_players
 
         # Save betting history
-        self.history_raise_nums = [0 for _ in range(2)]
+        self.history_raise_nums = [0 for _ in range(4)]
 
         self.dealer = None
         self.players = None
@@ -102,7 +102,7 @@ class LimitHoldemGame:
         state = self.get_state(self.game_pointer)
 
         # Save betting history
-        self.history_raise_nums = [0 for _ in range(2)]
+        self.history_raise_nums = [0 for _ in range(4)]
 
         return state, self.game_pointer
 
@@ -139,17 +139,17 @@ class LimitHoldemGame:
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # Simple holdem : both cards are revealed at the end of the round, proceeding to another round
+            #if self.round_counter == 0:
+            #    self.public_cards.append(self.dealer.deal_card())
+            #    self.public_cards.append(self.dealer.deal_card())
             if self.round_counter == 0:
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
-            #if self.round_counter == 0:
-                #self.public_cards.append(self.dealer.deal_card())
-                #self.public_cards.append(self.dealer.deal_card())
-                #self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
 
             # For the following rounds, we deal only 1 card
-            #elif self.round_counter <= 2:
-            #    self.public_cards.append(self.dealer.deal_card())
+            elif self.round_counter <= 2:
+                self.public_cards.append(self.dealer.deal_card())
 
             # Double the raise amount for the last two rounds
             #if self.round_counter == 1:
