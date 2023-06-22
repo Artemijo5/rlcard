@@ -16,7 +16,7 @@ class Hand:
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
         self.STRING_TO_RANK = {v:k for k, v in self.RANK_TO_STRING.items()}
-        self.RANK_LOOKUP = "23456789TJQKA"
+        self.RANK_LOOKUP = "TJQKA"
         self.SUIT_LOOKUP = "SCDH"
 
     def get_hand_five_cards(self):
@@ -39,7 +39,7 @@ class Hand:
         Evaluate all the seven cards, get the best combination catagory
         And pick the best five cards (for comparing in case 2 hands have the same Category) .
         """
-        if len(self.all_cards) != 3:
+        if len(self.all_cards) != 6:
             raise Exception(
                 "There are not enough 6 cards in this hand, quit evaluation now ! ")
 
@@ -355,8 +355,8 @@ class Hand:
                 Trip_cards += cards_by_rank.pop(i)[1:4]
                 break
 
-        #Trip_cards += cards_by_rank.pop(-1)[1:2]
-        #Trip_cards += cards_by_rank.pop(-1)[1:2]
+        Trip_cards += cards_by_rank.pop(-1)[1:2]
+        Trip_cards += cards_by_rank.pop(-1)[1:2]
         Trip_cards.reverse()
         return Trip_cards
 
@@ -391,8 +391,8 @@ class Hand:
                 One_Pair_cards += cards_by_rank.pop(i)[1:3]
                 break
 
-        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
-        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        One_Pair_cards += cards_by_rank.pop(-1)[1:2]
         One_Pair_cards += cards_by_rank.pop(-1)[1:2]
         One_Pair_cards.reverse()
         return One_Pair_cards
@@ -403,7 +403,7 @@ class Hand:
         Returns:
             (list): best five hand cards after sort
         '''
-        High_cards = self.all_cards#[2:7]
+        High_cards = self.all_cards[2:7]
         return High_cards
 
 def compare_ranks(position, hands, winner):
