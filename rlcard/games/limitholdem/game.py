@@ -21,7 +21,7 @@ class LimitHoldemGame:
 
         # Raise amount and allowed times
         self.raise_amount = 1
-        self.allowed_raise_num = 1 # deemed to be so according to given rules
+        self.allowed_raise_num = 2 # deemed to be so according to given rules
 
         self.num_players = num_players
 
