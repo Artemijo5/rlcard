@@ -16,12 +16,11 @@ class LimitHoldemGame:
         # Some configurations of the game
         # These arguments can be specified for creating new games
 
-        # Small blind and big blind
-        self.small_blind = 0.5
-        self.big_blind = 1 * self.small_blind
+        # ante
+        self.ante = 0.5
 
         # Raise amount and allowed times
-        self.raise_amount = 2 * self.big_blind
+        self.raise_amount = 2 * ante
         self.allowed_raise_num = 2 # deemed to be so according to given rules
 
         self.num_players = num_players
@@ -72,13 +71,18 @@ class LimitHoldemGame:
         self.public_cards = []
 
         # Randomly choose a small blind and a big blind
-        s = self.np_random.randint(0, self.num_players)
-        b = (s + 1) % self.num_players
-        self.players[b].in_chips = self.big_blind
-        self.players[s].in_chips = self.small_blind
+        #s = self.np_random.randint(0, self.num_players)
+        #b = (s + 1) % self.num_players
+        #self.players[b].in_chips = self.big_blind
+        #self.players[s].in_chips = self.small_blind
 
         # The player next to the big blind plays the first
-        self.game_pointer = (b + 1) % self.num_players
+        #self.game_pointer = (b + 1) % self.num_players
+
+        # change the above : all players bet the ante, and game_pointer is chosen randomly
+        for player in self.players:
+            player.in_chips = self.ante
+        self.game_pointer = self.np_random.randint(0, self.num_players)
 
         # Initialize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
@@ -241,7 +245,7 @@ class LimitHoldemGame:
         """
         hands = [p.hand + self.public_cards if p.status == PlayerStatus.ALIVE else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
-        payoffs = np.array(chips_payoffs) / self.big_blind
+        payoffs = np.array(chips_payoffs) / self.ante
         return payoffs
 
     def get_legal_actions(self):
