@@ -145,9 +145,9 @@ class LimitHoldemGame:
             if self.round_counter == 0:
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
-                #self.public_cards.append(self.dealer.deal_card())
-                #self.public_cards.append(self.dealer.deal_card())
-                #self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
 
             # For the following rounds, we deal only 1 card
             #elif self.round_counter <= 2:
