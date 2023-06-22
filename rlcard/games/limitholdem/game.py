@@ -138,22 +138,21 @@ class LimitHoldemGame:
 
         # If a round is over, we deal more public cards
         if self.round.is_over():
-            # Simple holdem : after the first round, deal 2 cards
+            # Simple holdem : both cards are revealed at the end of the round, proceeding to another round
+            #self.public_cards.append(self.dealer.deal_card())
+            #self.public_cards.append(self.dealer.deal_card())
             if self.round_counter == 0:
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
-            #if self.round_counter == 0:
-            #    self.public_cards.append(self.dealer.deal_card())
-            #    self.public_cards.append(self.dealer.deal_card())
-            #    self.public_cards.append(self.dealer.deal_card())
+                self.public_cards.append(self.dealer.deal_card())
 
             # For the following rounds, we deal only 1 card
-            #elif self.round_counter <= 2:
-            #    self.public_cards.append(self.dealer.deal_card())
+            elif self.round_counter <= 2:
+                self.public_cards.append(self.dealer.deal_card())
 
             # Double the raise amount for the last two rounds
-            #if self.round_counter == 1:
-            #    self.round.raise_amount = 2 * self.raise_amount
+            if self.round_counter == 1:
+                self.round.raise_amount = 2 * self.raise_amount
 
             self.round_counter += 1
             self.round.start_new_round(self.game_pointer)
