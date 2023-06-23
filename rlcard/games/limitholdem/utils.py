@@ -225,7 +225,14 @@ class Hand:
         # the For Loop misses operation for the last card
         # These 3 lines below to compensate that
         product *= prime_lookup[count]
-        product = 1
+        if product == 4 or product == 8:
+            product = 2
+        elif product == 5 or product == 10 or product == 15:
+            product = 3
+        elif product == 12 or product == 9 or product == 6:
+            product = 3
+        else:
+            product = 1
         # insert the number of same rank card to the beginning of the
         card_group_element.insert(0, count)
         # after the loop, there is still one last card to add
