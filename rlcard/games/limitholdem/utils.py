@@ -607,8 +607,8 @@ def final_compare(hands, potential_winner_index, all_players):
         if hand.category == 3:
             return determine_winner([4, 2, 0], equal_hands, all_players, potential_winner_index)
         if hand.category == 2:
-            return determine_winner([4, 2, 1, 0], equal_hands, all_players, potential_winner_index)
+            return determine_winner([2, 1, 0], equal_hands, all_players, potential_winner_index)
         if hand.category == 1 or hand.category == 6:
-            return determine_winner([4, 3, 2, 1, 0], equal_hands, all_players, potential_winner_index)
+            return determine_winner([2, 1, 0], equal_hands, all_players, potential_winner_index)
         if hand.category in [5, 9]:
             return determine_winner_straight(equal_hands, all_players, potential_winner_index)
