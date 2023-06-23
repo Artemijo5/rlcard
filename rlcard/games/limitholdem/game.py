@@ -102,7 +102,7 @@ class LimitHoldemGame:
         state = self.get_state(self.game_pointer)
 
         # Save betting history
-        self.history_raise_nums = [0 for _ in range(2)]
+        self.history_raise_nums = [0 for _ in range(4)]
 
         return state, self.game_pointer
 
