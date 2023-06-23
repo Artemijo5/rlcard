@@ -359,7 +359,8 @@ class Hand:
 
         #Trip_cards += cards_by_rank.pop(-1)[1:2]
         #Trip_cards += cards_by_rank.pop(-1)[1:2]
-        #Trip_cards.reverse()
+        Trip_cards.reverse()
+
         return Trip_cards
 
     def _get_Two_Pair_cards(self):
@@ -394,9 +395,15 @@ class Hand:
                 break
 
         One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+<<<<<<< HEAD
+        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
+        One_Pair_cards.reverse()
+=======
         #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
         #One_Pair_cards += cards_by_rank.pop(-1)[1:2]
         #One_Pair_cards.reverse()
+>>>>>>> e7ea774b2f000b88fed2f3b02ca958ccc7ca13d4
         return One_Pair_cards
 
     def _get_High_cards(self):
