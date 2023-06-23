@@ -26,7 +26,7 @@ class LimitHoldemGame:
         self.num_players = num_players
 
         # Save betting history
-        self.history_raise_nums = [0 for _ in range(4)]
+        self.history_raise_nums = [0 for _ in range(2)]
 
         self.dealer = None
         self.players = None
