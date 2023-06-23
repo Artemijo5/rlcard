@@ -228,8 +228,6 @@ class Hand:
         card_group_element.insert(0, count)
         # after the loop, there is still one last card to add
         card_group.append(card_group_element)
-        if product > 3:
-            product = 3 # ?
         return card_group, product
 
     def _has_four(self):
