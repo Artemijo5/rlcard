@@ -34,18 +34,19 @@ class LimitholdemRuleAgentV1(object):
         if len(public_cards) == 0:
             if hand[0][1] in ['A', 'K']:
                 action = 'raise'
-            elif hand[0][1] in ['Q', 'J']:
+            elif hand[0][1] in ['Q', 'J', 'T']:
                 action = 'check'
-            elif hand[0][1] in ['T']:
-                action = 'fold'
+            #elif hand[0][1] in ['T']:
+            #    action = 'fold'
                 
         if len(public_cards) == 2:
-            if hand[0][1] in ['A', 'K']:
-                action = 'raise'
-            elif hand[0][1] in ['Q', 'J']:
-                action = 'check'
-            elif hand[0][1] in ['T']:
-                action = 'fold'
+            table = [elem[1] for elem in public_cards]
+            if hand[0][1] in table:
+                if table[0] == table[1] or hand[0][1] in ['A', 'K', 'Q']:
+                    action = 'raise'
+                else:
+                    action = 'check'
+
 
         #return action
         if action in legal_actions:
