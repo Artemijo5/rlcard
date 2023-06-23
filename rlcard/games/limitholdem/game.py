@@ -21,7 +21,7 @@ class LimitHoldemGame:
 
         # Raise amount and allowed times
         self.raise_amount = 2 * self.ante
-        self.allowed_raise_num = 2 # deemed to be so according to given rules
+        self.allowed_raise_num = 1 # deemed to be so according to given rules
 
         self.num_players = num_players
 
@@ -145,9 +145,9 @@ class LimitHoldemGame:
             if self.round_counter == 0:
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
-                self.public_cards.append(self.dealer.deal_card())
-                self.public_cards.append(self.dealer.deal_card())
-                self.public_cards.append(self.dealer.deal_card())
+                #self.public_cards.append(self.dealer.deal_card())
+                #self.public_cards.append(self.dealer.deal_card())
+                #self.public_cards.append(self.dealer.deal_card())
 
             # For the following rounds, we deal only 1 card
             #elif self.round_counter <= 2:
