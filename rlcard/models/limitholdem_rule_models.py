@@ -42,7 +42,7 @@ class LimitholdemRuleAgentV1(object):
         if len(public_cards) == 2:
             table = [elem[1] for elem in public_cards]
             if hand[0][1] in table:
-                if table[0] == table[1] or hand[0][1] in ['A', 'K', 'Q']:
+                if table[0] == table[1] or hand[0][1] in ['A', 'K']:
                     action = 'raise'
                 else:
                     action = 'check'
