@@ -45,7 +45,7 @@ class PolicyIterator():
         '''Run a single game, decide action according to policy.'''
         print('WIP')
 
-    def decideAccordingToPolicy(pi = self.policy)
+    def decideAccordingToPolicy(pi = self.policy):
         '''Use pi to make a decision, if not legal then make appropriate decision'''
         print('WIP')
 
