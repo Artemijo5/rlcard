@@ -89,6 +89,402 @@ class PolicyIterator():
                 17: 0.0, # High T
                 18: 0.0, # Double T
                 19: 0.0 #Triple T
+            },
+            2: { # Double A
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            3: { # Triple A
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            4: { # First K
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.24, # High K
+                6 : 0.32, # Double K
+                7 : 0.04, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.0, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            5: { # High K
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            6: { # Double K
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            7: { # Triple K
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            8: { # First Q
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.16, # High K
+                6 : 0.04, # Double K
+                7 : 0.04, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.0, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            9: { # High Q
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            10: { # Double Q
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            11: { # Triple Q
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            12: { # First J
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.32, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.16, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.08, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.32, # Double J
+                15: 0.04, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            12: { # High J
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            14: { # Double J
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            15: { # Triple J
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            16: { # First T
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.16, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.08, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.32, # Double T
+                19: 0.04 #Triple T
+            },
+            17: { # High T
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            18: { # Double T
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
+            },
+            19: { # Triple T
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.2, # First K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.2, # First Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.2, # First J
+                13: 0.0, # High J
+                14: 0.0, # Double J
+                15: 0.0, # Triple J
+                16: 0.2, # First T
+                17: 0.0, # High T
+                18: 0.0, # Double T
+                19: 0.0 #Triple T
             }
         }
 
