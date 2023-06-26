@@ -46,27 +46,49 @@ class PolicyIterator():
         # Given the current state, probability of each other state being next (action shouldn't influence this)
         #self.P_next = np.zeros((self.POSSIBLE_STATES, self.POSSIBLE_STATES), dtype = np.float64)
         self.P_next = {
-            0: {
-                0 : 0, # First A
+            0: { # First A
+                0 : 0.0, # First A
                 1 : 0.48, # High A
                 2 : 0.32, # Double A
                 3 : 0.04, # Triple A
-                4 : 0, # First K
-                5 : 0, # High K
+                4 : 0.0, # First K
+                5 : 0.0, # High K
                 6 : 0.04, # Double K
-                7 : 0, # Triple K
-                8 : 0, # First Q
-                9 : 0, # High Q
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.0, # High Q
                 10: 0.04, # Double Q
-                11: 0, # Triple Q
-                12: 0, # First J
-                13: 0, # High J
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
                 14: 0.04, # Double J
-                15: 0, # Triple J
-                16: 0, # First T
-                17: 0, # High T
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
                 18: 0.04, # Double T
-                19: 0 #Triple T
+                19: 0.0 #Triple T
+            },
+            1: { # High A
+                0 : 0.2, # First A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.0, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.0, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
             }
         }
 
