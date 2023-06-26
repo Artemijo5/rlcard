@@ -10,11 +10,71 @@ class PolicyIterator():
     '''Implement Policy Iteration, for the simplified limit-holdem
     '''
 
-    def __init__(self, env, init_pi = None, P, gamma = 1.0, epsilon = 1e-10, model_path='.pol_iter_model'):
+    def __init__(self, init_pi = None, gamma = 1.0, epsilon = 1e-10, model_path='.pol_iter_model'):
         self.use_raw = False
-        self.env = env
+        self.env = rlcard.make('limit-holdem')
         self.model_path = model_path
 
+        self.possible_states = 20
+
         self.policy = init_pi
+        # If no policy is provided, assume a random policy with uniform probability
         if init_pi == None:
-            self.policy = np.array([1.0/self.env.num_actions for _ in range(self.env.num_actions)])
+            self.policy = np.array([[1.0/self.env.num_actions]*self.env.num_actions for _ in range(self.possible_states)])
+        
+        # State-Action Average Reward table, which will be filled prior to the actual algorithm
+        self.T_P = 100 # number of games to fill in P - if viable, make 100k
+        # 5 cards, can be either in 1st round, as high card, double, or third -> 20 states
+        # 4 possible (attempted) actions
+        # In total: 80 state-action combos
+        # 2 numerical data stored for each state-action: times encountered (n), amassed reward (r)
+        self.Pn = np.zeros((20, self.env.num_actions), dtype = np.int8) # times s-a has been encountered
+        self.Pr = np.zeros((20, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
+
+    
+    def fillInTable(pi = self.policy, Pn = self.Pn, Pr = self.Pr, runs = self.T_P):
+        for t in range(runs):
+            '''
+            Run 1 game.
+            Get states & rewards.
+            Fill in the appropriate slots of P.
+            '''
+            print('WIP')
+    
+    def runToFill(pi = self.policy):
+        '''Run a single game, decide action according to policy.'''
+        print('WIP')
+
+    def decideAccordingToPolicy(pi = self.policy)
+        '''Use pi to make a decision, if not legal then make appropriate decision'''
+        print('WIP')
+
+
+    def policyEval(pi = self.policy, Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
+        '''Policy Evaluation'''
+        print('WIP')
+    
+    def policyImprovement(V, Pn = self.Pn, Pr = self.Pr):
+        '''Policy Improvement'''
+        print('WIP')
+    
+    def policyIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
+        '''Policy Iteration'''
+        print('WIP')
+    
+    def valueIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
+        '''Value Iteration'''
+        print('WIP')
+    
+
+    def step():
+        print('WIP')
+
+    def eval_step():
+        print('WIP')
+    
+    def save():
+        print('WIP')
+    
+    def load():
+        print('WIP')
