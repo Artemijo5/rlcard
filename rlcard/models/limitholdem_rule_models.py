@@ -28,8 +28,8 @@ class LimitholdemRuleAgentV1(object):
         if len(public_cards) == 0:
             if hand[0][1] in ['A', 'K']:
                 action = 'raise'
-            elif hand[0][1] in ['Q', 'J', 'T']:
-                action = 'check'
+            #elif hand[0][1] in ['Q', 'J']:
+            #    action = 'check'
             #elif hand[0][1] in ['T']:
             #    action = 'fold'
                 
