@@ -23,14 +23,8 @@ class LimitholdemRuleAgentV1(object):
         state = state['raw_obs']
         hand = state['hand']
         public_cards = state['public_cards']
-        action = 'fold'
-        # When having only 2 hand cards at the game start, choose fold to drop terrible cards:
-        # Acceptable hand cards:
-        # Pairs
-        # AK, AQ, AJ, AT
-        # A9s, A8s, ... A2s(s means flush)
-        # KQ, KJ, QJ, JT
-        # Fold all hand types except those mentioned above to save money
+        action = 'check'
+        
         if len(public_cards) == 0:
             if hand[0][1] in ['A', 'K']:
                 action = 'raise'
@@ -45,7 +39,7 @@ class LimitholdemRuleAgentV1(object):
                 if table[0] == table[1] or hand[0][1] in ['A', 'K']:
                     action = 'raise'
                 else:
-                    action = 'check'
+                    action = 'call'
 
 
         #return action
