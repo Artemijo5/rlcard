@@ -10,7 +10,10 @@ class CFRAgent():
     ''' Implement CFR (chance sampling) algorithm
     '''
 
-    def __init__(self, env, model_path='./policyIteration_model', init_pi = {'raise': 1/4, 'call': 1/4, 'check': 1/4, 'fold': 1/4} ):
+    # initialise policy as that of random agent if no policy is given
+    random_pi = np.array([1.0/self.env.num_actions for _ in range(self.env.num_actions)])
+
+    def __init__(self, env, model_path='./policyIteration_model', init_pi = random_pi ):
         ''' Initilize Agent
 
         Args:
@@ -21,7 +24,7 @@ class CFRAgent():
         self.model_path = model_path
 
         # A policy is a dict state_str -> action probabilities
-        self.policy = init_pi
+        self.policy = collections.defaultdict(list)
         self.average_policy = collections.defaultdict(np.array)
 
         # Regret is a dict state_str -> action regrets
