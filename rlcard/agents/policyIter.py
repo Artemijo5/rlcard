@@ -15,7 +15,18 @@ class PolicyIterator():
         self.env = rlcard.make('limit-holdem')
         self.model_path = model_path
 
+        # state encoding:
         self.possible_states = 20
+        self.A_s = 0
+        self.K_s = 1
+        self.Q_s = 2
+        self.J_s = 3
+        self.T_s = 4
+        self.first_round = 0
+        self.high_card = 1
+        self.double = 2
+        self.triple = 3
+        # state = 4*card + quantity/round
 
         self.policy = init_pi
         # If no policy is provided, assume a random policy with uniform probability
@@ -65,16 +76,21 @@ class PolicyIterator():
     def valueIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
         '''Value Iteration'''
         print('WIP')
+
+
+    def get_state(self, player_id):
+        state = self.env.get_state(player_id)
+        
     
 
-    def step():
+    def step(self, state):
         print('WIP')
 
-    def eval_step():
+    def eval_step(self, state):
         print('WIP')
     
-    def save():
+    def save(self):
         print('WIP')
     
-    def load():
+    def load(self):
         print('WIP')
