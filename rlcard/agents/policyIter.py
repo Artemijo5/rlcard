@@ -332,7 +332,7 @@ class PolicyIterator():
                 18: 0.04, # Double T
                 19: 0.0 #Triple T
             },
-            12: { # High J
+            12: { # High J - not actually possible
                 0 : 0.2, # First A
                 1 : 0.0, # High A
                 2 : 0.0, # Double A
@@ -420,7 +420,7 @@ class PolicyIterator():
                 18: 0.32, # Double T
                 19: 0.04 #Triple T
             },
-            17: { # High T
+            17: { # High T - not actually possible
                 0 : 0.2, # First A
                 1 : 0.0, # High A
                 2 : 0.0, # Double A
