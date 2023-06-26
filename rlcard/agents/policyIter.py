@@ -16,22 +16,23 @@ class PolicyIterator():
         self.model_path = model_path
 
         # state encoding:
-        self.possible_states = 20
+        self.POSSIBLE_STATES = 20
         self.A_s = 0
         self.K_s = 1
         self.Q_s = 2
         self.J_s = 3
         self.T_s = 4
-        self.first_round = 0
-        self.high_card = 1
-        self.double = 2
-        self.triple = 3
+        self.FIRST_ROUND = 0
+        self.HIGH_CARD = 1
+        self.DOUBLE = 2
+        self.TRIPLE = 3
         # state = 4*card + quantity/round
+        # technically 18 possible states, since J, T can't be high cards, but would be tedious to change now
 
         self.policy = init_pi
         # If no policy is provided, assume a random policy with uniform probability
         if init_pi == None:
-            self.policy = np.array([[1.0/self.env.num_actions]*self.env.num_actions for _ in range(self.possible_states)])
+            self.policy = np.array([[1.0/self.env.num_actions]*self.env.num_actions for _ in range(self.POSSIBLE_STATES)])
         
         # State-Action Average Reward table, which will be filled prior to the actual algorithm
         self.T_P = 100 # number of games to fill in P - if viable, make 100k
@@ -79,7 +80,44 @@ class PolicyIterator():
 
 
     def get_state(self, player_id):
+        '''Get the "state" of the player, ie the highest card in their hand + quantity/round'''
         state = self.env.get_state(player_id)
+        state = state['raw_obs']
+        hand = state['hand'][1]
+        table = [elem[1] for elem in state['public_cards']]
+        quant = 0
+        card = 0
+
+        card_states = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
+
+        if(len(total_state['public_cards'])==0):
+            quant = self.FIRST_ROUND
+            card = card_states(hand)
+        else:
+            if(table[0]==hand or table[1]==hand):
+                card = card_states(hand)
+                if table[0] == table[1]:
+                    quant = self.TRIPLE
+                else:
+                    quant = self.DOUBLE
+            elif(table[0] == table[1]):
+                card = card_states(table[0])
+                quant = self.DOUBLE
+            else: # if all 3 cards are different, J and T are excluded, only A, K, Q matter
+                quant = self.HIGH_CARD
+                if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
+                    card = card_states('A')
+                elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
+                    card = card_states('K')
+                else:
+                    card = card_states('Q')
+        
+        return 4*card + quant
+
+    def get_reward(self, player_id):
+        reward = self.env.get_payoffs()[player_id]
+        return reward
+        
         
     
 
