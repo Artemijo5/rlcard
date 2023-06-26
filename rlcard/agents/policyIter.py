@@ -40,8 +40,8 @@ class PolicyIterator():
         # 4 possible (attempted) actions
         # In total: 80 state-action combos
         # 2 numerical data stored for each state-action: times encountered (n), amassed reward (r)
-        self.Pn = np.zeros((20, self.env.num_actions), dtype = np.int8) # times s-a has been encountered
-        self.Pr = np.zeros((20, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
+        self.Pn = np.zeros((self.POSSIBLE_STATES, self.env.num_actions), dtype = np.int8) # times s-a has been encountered
+        self.Pr = np.zeros((self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
 
         # Given the current state, probability of each other state being next (action shouldn't influence this)
         #self.P_next = np.zeros((self.POSSIBLE_STATES, self.POSSIBLE_STATES), dtype = np.float64)
