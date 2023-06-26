@@ -73,21 +73,21 @@ class PolicyIterator():
                 1 : 0.0, # High A
                 2 : 0.0, # Double A
                 3 : 0.0, # Triple A
-                4 : 0.0, # First K
+                4 : 0.2, # First K
                 5 : 0.0, # High K
-                6 : 0.04, # Double K
+                6 : 0.0, # Double K
                 7 : 0.0, # Triple K
-                8 : 0.0, # First Q
+                8 : 0.2, # First Q
                 9 : 0.0, # High Q
-                10: 0.04, # Double Q
+                10: 0.0, # Double Q
                 11: 0.0, # Triple Q
-                12: 0.0, # First J
+                12: 0.2, # First J
                 13: 0.0, # High J
-                14: 0.04, # Double J
+                14: 0.0, # Double J
                 15: 0.0, # Triple J
-                16: 0.0, # First T
+                16: 0.2, # First T
                 17: 0.0, # High T
-                18: 0.04, # Double T
+                18: 0.0, # Double T
                 19: 0.0 #Triple T
             }
         }
