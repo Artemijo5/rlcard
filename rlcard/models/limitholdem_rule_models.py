@@ -50,7 +50,7 @@ class LimitholdemRuleAgentV1(object):
                 return 'call'
             if action == 'check':
                 if len(public_cards) == 0:
-                    return call
+                    return 'call'
                 else:
                     return 'fold'
             if action == 'call':
