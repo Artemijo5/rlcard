@@ -528,14 +528,14 @@ class PolicyIterator():
         '''Get the "state" of the player, ie the highest card in their hand + quantity/round'''
         state = self.env.get_state(player_id)
         state = state['raw_obs']
-        hand = state['hand'][1]
+        hand = state['hand'][0][1]
         table = [elem[1] for elem in state['public_cards']]
         quant = 0
         card = 0
 
         card_states = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
 
-        if(len(total_state['public_cards'])==0):
+        if(len(table)==0):
             quant = self.FIRST_ROUND
             card = card_states(hand)
         else:
