@@ -35,7 +35,7 @@ class LimitholdemRuleAgentV1(object):
             #elif hand[0][1] in ['T']:
             #    action = 'fold'
 
-        print(public_cards[0][1]+public_cards[1][1]) 
+        print(public_cards[0][1]+public_cards[1][1]+'\n') 
         if len(public_cards) == 2:
             table = [elem[1] for elem in public_cards]
             if hand[0][1] in table:
