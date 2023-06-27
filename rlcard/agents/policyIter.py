@@ -537,25 +537,25 @@ class PolicyIterator():
 
         if(len(table)==0):
             quant = self.FIRST_ROUND
-            card = card_states(hand)
+            card = card_states[hand]
         else:
             if(table[0]==hand or table[1]==hand):
-                card = card_states(hand)
+                card = card_states[hand]
                 if table[0] == table[1]:
                     quant = self.TRIPLE
                 else:
                     quant = self.DOUBLE
             elif(table[0] == table[1]):
-                card = card_states(table[0])
+                card = card_states[table[0]]
                 quant = self.DOUBLE
             else: # if all 3 cards are different, J and T are excluded, only A, K, Q matter
                 quant = self.HIGH_CARD
                 if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
-                    card = card_states('A')
+                    card = card_states['A']
                 elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
-                    card = card_states('K')
+                    card = card_states['K']
                 else:
-                    card = card_states('Q')
+                    card = card_states['Q']
         
         return 4*card + quant
 
