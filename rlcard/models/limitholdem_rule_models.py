@@ -24,8 +24,6 @@ class LimitholdemRuleAgentV1(object):
         hand = state['hand']
         public_cards = state['public_cards']
         action = 'check'
-        
-        print('\n'+hand[0])
 
         if len(public_cards) == 0:
             if hand[0][1] in ['A', 'K']:
@@ -35,7 +33,6 @@ class LimitholdemRuleAgentV1(object):
             #elif hand[0][1] in ['T']:
             #    action = 'fold'
 
-        print(public_cards[0][1]+public_cards[1][1]+'\n') 
         if len(public_cards) == 2:
             table = [elem[1] for elem in public_cards]
             if hand[0][1] in table:
