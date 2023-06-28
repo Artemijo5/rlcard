@@ -50,7 +50,7 @@ class LimitholdemRuleAgentV1(object):
                 else:
                     return 'fold'
             if action == 'call':
-                return 'raise'
+                return 'check'
             else:
                 return action
 
