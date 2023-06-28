@@ -36,9 +36,6 @@ class LimitholdemRuleAgentV1(object):
                     action = 'raise'
                 else:
                     action = 'call'
-            else:
-                if hand[0][1] in ['A', 'K']:
-                    action = 'check'
 
 
         #return action
