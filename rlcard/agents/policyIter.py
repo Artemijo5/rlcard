@@ -39,12 +39,13 @@ class PolicyIterator():
         # 5 cards, can be either in 1st round, as high card, double, or third -> 20 states
         # 4 possible (attempted) actions
         # In total: 80 state-action combos
-        # 2 numerical data stored for each state-action: times encountered (n), amassed reward (r)
-        self.Pn = np.zeros((self.POSSIBLE_STATES, self.env.num_actions), dtype = np.int8) # times s-a has been encountered
-        self.Pr = np.zeros((self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
+        self.R = np.zeros((2, 3,self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
+        # TODO either fill in P's manually, or add the function that fills them on init
 
-        # Given the current state, probability of each other state being next (action shouldn't influence this)
-        #self.P_next = np.zeros((self.POSSIBLE_STATES, self.POSSIBLE_STATES), dtype = np.float64)
+
+        # State Transition Probability Table
+        # only needed for first round states - second round states are guaranteed final
+        # gamma will need to be less than one, if nothing else, to account for the possibility of game ending at round 1
         self.P_next = {
             0: { # First A
                 0 : 0.0, # First A
@@ -66,72 +67,6 @@ class PolicyIterator():
                 16: 0.0, # First T
                 17: 0.0, # High T
                 18: 0.04, # Double T
-                19: 0.0 #Triple T
-            },
-            1: { # High A
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            2: { # Double A
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            3: { # Triple A
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
                 19: 0.0 #Triple T
             },
             4: { # First K
@@ -156,72 +91,6 @@ class PolicyIterator():
                 18: 0.04, # Double T
                 19: 0.0 #Triple T
             },
-            5: { # High K
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            6: { # Double K
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            7: { # Triple K
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
             8: { # First Q
                 0 : 0.0, # First A
                 1 : 0.24, # High A
@@ -242,72 +111,6 @@ class PolicyIterator():
                 16: 0.0, # First T
                 17: 0.0, # High T
                 18: 0.04, # Double T
-                19: 0.0 #Triple T
-            },
-            9: { # High Q
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            10: { # Double Q
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            11: { # Triple Q
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
                 19: 0.0 #Triple T
             },
             12: { # First J
@@ -332,72 +135,6 @@ class PolicyIterator():
                 18: 0.04, # Double T
                 19: 0.0 #Triple T
             },
-            12: { # High J - not actually possible
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            14: { # Double J
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            15: { # Triple J
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
             16: { # First T
                 0 : 0.0, # First A
                 1 : 0.24, # High A
@@ -419,72 +156,6 @@ class PolicyIterator():
                 17: 0.0, # High T
                 18: 0.32, # Double T
                 19: 0.04 #Triple T
-            },
-            17: { # High T - not actually possible
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            18: { # Double T
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
-            },
-            19: { # Triple T
-                0 : 0.2, # First A
-                1 : 0.0, # High A
-                2 : 0.0, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.2, # First K
-                5 : 0.0, # High K
-                6 : 0.0, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.2, # First Q
-                9 : 0.0, # High Q
-                10: 0.0, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.2, # First J
-                13: 0.0, # High J
-                14: 0.0, # Double J
-                15: 0.0, # Triple J
-                16: 0.2, # First T
-                17: 0.0, # High T
-                18: 0.0, # Double T
-                19: 0.0 #Triple T
             }
         }
 
