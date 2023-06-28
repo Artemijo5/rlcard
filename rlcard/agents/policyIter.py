@@ -35,17 +35,17 @@ class PolicyIterator():
             self.policy = np.array([[1.0/self.env.num_actions]*self.env.num_actions for _ in range(self.POSSIBLE_STATES)])
         
         # State-Action Average Reward table, which will be filled prior to the actual algorithm
-        self.T_P = 100 # number of games to fill in P - if viable, make 100k
+        # Assumes random adversary
         # 5 cards, can be either in 1st round, as high card, double, or third -> 20 states
         # 4 possible (attempted) actions
         # In total: 80 state-action combos
-        self.R = np.zeros((2, 3,self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
+        self.R = np.zeros((2, 4,self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
         # TODO either fill in P's manually, or add the function that fills them on init
-
+        #self.fillInRewardTable()
 
         # State Transition Probability Table
         # only needed for first round states - second round states are guaranteed final
-        # gamma will need to be less than one, if nothing else, to account for the possibility of game ending at round 1
+        # gamma will need to be less than one, to account for the possibility of game ending at round 1
         self.P_next = {
             0: { # First A
                 0 : 0.0, # First A
@@ -160,23 +160,20 @@ class PolicyIterator():
         }
 
     
-    def fillInTable(pi = self.policy, Pn = self.Pn, Pr = self.Pr, runs = self.T_P):
+    def fillInRewardTable(P = self.P, R = self.R):
         for t in range(runs):
+            # TODO either add exhaustive code here or fill reward table manually
             '''
             Run 1 game.
             Get states & rewards.
             Fill in the appropriate slots of P.
             '''
             print('WIP')
-    
-    def runToFill(pi = self.policy):
-        '''Run a single game, decide action according to policy.'''
-        print('WIP')
+
 
     def decideAccordingToPolicy(pi = self.policy):
         '''Use pi to make a decision, if not legal then make appropriate decision'''
         print('WIP')
-
 
     def policyEval(pi = self.policy, Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
         '''Policy Evaluation'''
