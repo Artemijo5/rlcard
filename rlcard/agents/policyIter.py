@@ -41,6 +41,12 @@ class PolicyIterator():
         # In total: 80 state-action combos
         self.R = np.zeros((2, 4,self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
         # TODO either fill in P's manually, or add the function that fills them on init
+        self.P1 = 0
+        self.P2 = 1
+        # self.FIRST_ROUND also works for the index here
+        self.NONE_RAISED = 1
+        self.ONE_RAISED = 2
+        self.TWO_RAISED = 3
         #self.fillInRewardTable()
 
         # State Transition Probability Table
@@ -159,6 +165,13 @@ class PolicyIterator():
             }
         }
 
+        # PLOTTING
+        size = self.POSSIBLE_STATES
+        self.Tmax = 100000
+        Vplot = np.zeros((size,Tmax)) #these keep track how the Value function evolves, to be used in the GUI
+        Pplot = np.zeros((size,Tmax)) #these keep track how the Policy evolves, to be used in the GUI
+        t = 0
+
     
     def fillInRewardTable(P = self.P, R = self.R):
         for t in range(runs):
@@ -171,21 +184,82 @@ class PolicyIterator():
             print('WIP')
 
 
-    def decideAccordingToPolicy(pi = self.policy):
+    def decideAccordingToPolicy(s, pi = self.policy):
         '''Use pi to make a decision, if not legal then make appropriate decision'''
         print('WIP')
 
-    def policyEval(pi = self.policy, Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
-        '''Policy Evaluation'''
-        print('WIP')
+
+
+    def policyEval(player_id = self.P1, pi = self.policy, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
+        actions = {'call', 'raise', 'fold', 'check'}
+        action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
+
+        t = 0
+        prev_V = np.zeros(self.POSSIBLE_STATES)
+        while True:
+            V = np.zeros(self.POSSIBLE_STATES)
+            for s in range(self.POSSIBLE_STATES): # do for every state
+                for a in actions: # do for every our agent could take action
+                    if s% 4 == 0: # First Round
+                        # Bellman Step to include current round's reward
+                        V[s] += (pi[s][action_code[a])*(R[player_id][self.FIRST_ROUND][s][action_code[a]] + gamma*prev_V[s]) # TODO ???
+                        for next_state in range(len(P[s])):
+                            prob = P[s][next_state]
+                            reward = 0
+                            for a2 in actions:
+                                reward += pi[next_state][action_code[a2]]*R[player_id][self.FIRST_ROUND][next_state][action_code[a2]]
+                            # Bellman Step
+                            V[s] += prob * (reward + gamma*prev_V[next_state]) # TODO see how the 'not done' is to be handled
+                    else:
+                        # Second Round
+                        # There is no next step, only include this case with the Bellman step
+                        for t_index in {1, 2, 3}:
+                            V[s] += (pi[s][action_code[a])*(R[player_id][t_index][s][action_code[a]] + gamma*prev_V[s]) # TODO ???
+            if np.max(np.abs(V - prev_V)) < epsilon:
+                break
+            prev_V = V.copy()
+            t += 1
+            Vplot[:,t] = prev_V  # accounting for GUI
+        return V
+
+    def policyImprovement(V, player_id = 0, Pn = self.Pn, Pr = self.Pr):
+        actions = {'call', 'raise', 'fold', 'check'}
+        action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
+
+        Q = np.zeros(len(P), len(P[0]))
+        for s in range(len(P)):
+            for a in actions:
+                if s%4 == 0:
+                    for next_state in range(len(P[s])):
+                        prob = P[s][next_state]
+                        reward = 0
+                        for a2 in actions:
+                            reward += pi[next_state][action_code[a2]]*R[player_id][self.FIRST_ROUND][next_state][action_code[a2]]
+                        # Bellman Step
+                        Q[s][action_code[a]] += prob * (reward + gamma * V[next_state]) # TODO ???
+                else:
+                    for t_index in {1, 2, 3}:
+                        Q[s][action_code[a]] += (pi[s][action_code[a])*(R[player_id][t_index][s][action_code[a]] + gamma*prev_V[s]) # TODO ???
+        new_pi = lambda s: {s:a for s, a in enumerate(np.argmax(Q, axis=1))}[s]
+
+        return new_pi
     
-    def policyImprovement(V, Pn = self.Pn, Pr = self.Pr):
-        '''Policy Improvement'''
-        print('WIP')
-    
-    def policyIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
-        '''Policy Iteration'''
-        print('WIP')
+    def policyIteration(player_id = 0, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
+        t = 0
+
+        while True:
+            old_pi = {s: pi(s) for s in range(len(P))}  #keep the old policy to compare with new
+            V = policy_evaluation(player_id, pi, P, R, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
+            pi = policy_improvement(player_id, V, P, R, gamma)          #get a better policy using the value function of the previous one just calculated 
+            
+            t += 1
+            Pplot[:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
+            Vplot[:,t] = V                              #and the value function evolution (for the GUI)
+        
+            if old_pi == {s:pi(s) for s in range(len(P))}: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
+                break
+        print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
+        return V,pi
     
     def valueIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
         '''Value Iteration'''
