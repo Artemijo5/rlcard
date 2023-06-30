@@ -341,6 +341,7 @@ class PolicyIterator():
         
 
     def fillInRewardTableRandom(self):
+            init_policy = self.policy
             action = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
             
             '''
@@ -363,9 +364,9 @@ class PolicyIterator():
             # first, agent as player 1
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
                 state = self.get_state_Sim(hand1, None)
-                chanceOfRaisingFirst = self.init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
-                chanceOfFoldingAfter = self.init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
-                chanceOFCallingAfter = self.init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
+                chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                chanceOFCallingAfter = init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: #adversary
                     for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                         for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
