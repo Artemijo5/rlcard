@@ -15,7 +15,7 @@ class PolicyIterator():
         self.env = env
         self.model_path = model_path
 
-        self.evaluated = False
+        self.evaluated = [False, False] # for players 1 and 2
         self.num_actions = 4 # self.env.num_actions
 
         # state encoding:
@@ -169,89 +169,107 @@ class PolicyIterator():
         # PLOTTING
         self.size = self.POSSIBLE_STATES
         self.Tmax = 100000
-        Vplot = np.zeros((self.size,self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
-        Pplot = np.zeros((self.size,self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
+        Vplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
+        Pplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
         t = 0
-    '''
-    def decideAccordingToPolicy(s, pi = self.policy):
-        print('WIP')
-
-
-
-    def policyEval(player_id = self.P1, pi = self.policy, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
+    
+    def policyEval(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
         t = 0
-        prev_V = np.zeros(self.POSSIBLE_STATES)
+        prev_V = np.zeros(self.POSSIBLE_STATES, 4)
         while True:
-            V = np.zeros(self.POSSIBLE_STATES)
+            V = np.zeros(self.POSSIBLE_STATES, 4)
             for s in range(self.POSSIBLE_STATES): # do for every state
-                for a in actions: # do for every our agent could take action
-                    if s% 4 == 0: # First Round
-                        # Bellman Step to include current round's reward
-                        V[s] += (pi[s][action_code[a])*(R[player_id][self.FIRST_ROUND][s][action_code[a]] + gamma*prev_V[s]) # TODO ???
-                        for next_state in range(len(P[s])):
-                            prob = P[s][next_state]
-                            reward = 0
-                            for a2 in actions:
-                                reward += pi[next_state][action_code[a2]]*R[player_id][self.FIRST_ROUND][next_state][action_code[a2]]
-                            # Bellman Step
-                            V[s] += prob * (reward + gamma*prev_V[next_state]) # TODO see how the 'not done' is to be handled
-                    else:
-                        # Second Round
-                        # There is no next step, only include this case with the Bellman step
-                        for t_index in {1, 2, 3}:
-                            V[s] += (pi[s][action_code[a])*(R[player_id][t_index][s][action_code[a]] + gamma*prev_V[s]) # TODO ???
+                if s%4 == 0: # for first round
+                    for a1 in actions:
+                        raised = 0  # keep track of how many tokens are raised
+                        if a1 == 'raise':
+                            raised += 1
+                        # Bellman Step
+                        q = R[player_id][self.FIRST_ROUND][s][action_code[a1]]
+                        if(a1 != 'fold'):
+                            for next_state in range(len(self.P[s])):
+                                prob = self.P[s][next_state]
+                                for a2 in actions: # adversary's action
+                                    # in each case, multiply by 1/3
+                                    if a2 == 'raise':
+                                        raised += 1
+                                        q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
+                                    elif a2 == 'check' and a1 == 'check':
+                                        q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
+                                    elif a2 == 'call' and a1 == 'raise':
+                                        q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
+                        V[s][self.FIRST_ROUND] += policy[player_id][self.FIRST_ROUND][s][a1]*q
+                else: # for second round
+                    for raised in {0, 1, 2}: # for any number of tokens raised from round 1
+                        for a1 in actions:
+                            q = R[player_id][raised+1][s][action_code[a1]]
+                            # game lasts two rounds, so no next state
+                            V[s][raised+1] += policy[player_id][raised+1][s][a1]*q
             if np.max(np.abs(V - prev_V)) < epsilon:
                 break
             prev_V = V.copy()
             t += 1
-            Vplot[:,t] = prev_V  # accounting for GUI
+            Vplot[:,:,t] = prev_V  # accounting for GUI
         return V
 
-    def policyImprovement(V, player_id = 0, Pn = self.Pn, Pr = self.Pr):
+    def policyImprovement(self, V, player_id = 0):
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
-        Q = np.zeros(len(P), len(P[0]))
-        for s in range(len(P)):
-            for a in actions:
-                if s%4 == 0:
-                    for next_state in range(len(P[s])):
-                        prob = P[s][next_state]
-                        reward = 0
-                        for a2 in actions:
-                            reward += pi[next_state][action_code[a2]]*R[player_id][self.FIRST_ROUND][next_state][action_code[a2]]
-                        # Bellman Step
-                        Q[s][action_code[a]] += prob * (reward + gamma * V[next_state]) # TODO ???
-                else:
-                    for t_index in {1, 2, 3}:
-                        Q[s][action_code[a]] += (pi[s][action_code[a])*(R[player_id][t_index][s][action_code[a]] + gamma*prev_V[s]) # TODO ???
-        new_pi = lambda s: {s:a for s, a in enumerate(np.argmax(Q, axis=1))}[s]
-
+        Q = np.zeros(4, self.POSSIBLE_STATES, 4))
+        for s in range(self.POSSIBLE_STATES):
+            if s%4 == 0: # for first round
+                for a1 in actions:
+                    raised = 0
+                    if a1 == 'raise':
+                        raised += 1
+                    # Bellman Step
+                    q = R[player_id][self.FIRST_ROUND][s][action_code[a1]]
+                    if(a1 != 'fold'):
+                        for next_state in range(len(self.P[s])):
+                            prob = self.P[s][next_state]
+                            for a2 in actions: # adversary's action
+                                # in each case, multiply by 1/3
+                                if a2 == 'raise':
+                                    raised += 1
+                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
+                                elif a2 == 'check' and a1 == 'check':
+                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
+                                elif a2 == 'call' and a1 == 'raise':
+                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
+                    Q[self.FIRST_ROUND][s][a1] += policy[player_id][self.FIRST_ROUND][s][a1]*q
+            else: # for second round
+                for raised in {0, 1, 2}: # for any number of tokens raised from round 1
+                        for a1 in actions:
+                            q = R[player_id][raised+1][s][action_code[a1]]
+                            # game lasts two rounds, so no next state
+                            Q[s][raised+1][a1] += policy[player_id][raised+1][s][a1]*q
+        new_pi = Q.copy() # since pi is an array and not a function for us, should work
         return new_pi
     
-    def policyIteration(player_id = 0, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
+    def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
         t = 0
 
         while True:
-            old_pi = {s: pi(s) for s in range(len(P))}  #keep the old policy to compare with new
+            old_pi = policy[player_id][:][:][:] #keep the old policy to compare with new
             self.fillInRewardTableRandom(old_pi, R)
             V = policy_evaluation(player_id, pi, P, R, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
-            pi = policy_improvement(player_id, V, P, R, gamma)          #get a better policy using the value function of the previous one just calculated 
+            policy[player_id] = policy_improvement(player_id, V, P, R, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
-            Pplot[:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
-            Vplot[:,t] = V                              #and the value function evolution (for the GUI)
+            Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
+            Vplot[:,:,t] = V                              #and the value function evolution (for the GUI)
         
-            if old_pi == {s:pi(s) for s in range(len(P))}: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
+            if old_pi == policy[player_id][:][:][:]: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
-        self.evaluated = True
+        self.evaluated[player_id] = True
         return V,pi
     
-    def valueIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
+    def valueIteration(self, gamma = 1.0, epsilon = 1e-10):
         print('WIP')
 
 
@@ -288,7 +306,8 @@ class PolicyIterator():
                     card = card_states['Q']
         
         return 4*card + quant
-    '''
+
+
     def get_state_Sim(self, hand, table):
         cards = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
         quant = {'F': self.FIRST_ROUND, 'H': self.HIGH_CARD, 'D': self.DOUBLE, 'T': self.TRIPLE}
