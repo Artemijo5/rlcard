@@ -217,7 +217,7 @@ class PolicyIterator():
                 self.Vplot[j,:,t] = prev_V[:,j]  # accounting for GUI
         return V
 
-    def policyImprovement(self, V, player_id = 0, gamma = 1.0):
+    def policyImprovement(self, player_id = 0, V, gamma = 1.0):
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
@@ -229,17 +229,7 @@ class PolicyIterator():
                     if a1 == 'raise':
                         raised += 1
                     # Bellman Step
-                    ac = action_code[a1]
-                    print('player id')
-                    print(player_id)
-                    print('round')
-                    print(self.FIRST_ROUND)
-                    print('state')
-                    print(s)
-                    print('action')
-                    print(ac)
-                    print(self.R[player_id][self.FIRST_ROUND][s][ac])
-                    q = self.R[player_id][self.FIRST_ROUND][s][ac]
+                    q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
                     if(a1 != 'fold'):
                         for next_state in range(len(self.P_next[s])):
                             prob = self.P_next[s][next_state]
@@ -253,14 +243,13 @@ class PolicyIterator():
                                     q += (1/3)*gamma*prob*V[next_state][raised+1]
                                 elif a2 == 'call' and a1 == 'raise':
                                     q += (1/3)*gamma*prob*V[next_state][raised+1]
-                    Q[self.FIRST_ROUND][s][ac] += self.policy[player_id][self.FIRST_ROUND][s][ac]*q
+                    Q[self.FIRST_ROUND][s][action_code[a1]] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
             else: # for second round
                 for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                         for a1 in actions:
-                            ac = action_code[a1]
-                            q = self.R[player_id][raised+1][s][ac]
+                            q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
-                            Q[s][raised+1][ac] += self.policy[player_id][raised+1][s][ac]*q
+                            Q[s][raised+1][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
         new_pi = Q.copy() # since pi is an array and not a function for us, should work
         return new_pi
     
@@ -271,7 +260,7 @@ class PolicyIterator():
             old_pi = self.policy[player_id][:][:][:] #keep the old policy to compare with new
             self.fillInRewardTableRandom()
             V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
-            self.policy[player_id] = self.policyImprovement(player_id, V[:][:], gamma)          #get a better policy using the value function of the previous one just calculated 
+            self.policy[player_id] = self.policyImprovement(player_id, V, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
             self.Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
