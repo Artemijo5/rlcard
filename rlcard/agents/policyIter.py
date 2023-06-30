@@ -201,13 +201,13 @@ class PolicyIterator():
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
                                     elif a2 == 'call' and a1 == 'raise':
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
-                        V[s][self.FIRST_ROUND] += self.policy[player_id][self.FIRST_ROUND][s][a1]*q
+                        V[s][self.FIRST_ROUND] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
                 else: # for second round
                     for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                         for a1 in actions:
                             q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
-                            V[s][raised+1] += self.policy[player_id][raised+1][s][a1]*q
+                            V[s][raised+1] += self.policy[player_id][raised+1][s][action_code[a1]]*q
             if np.max(np.abs(V - prev_V)) < epsilon:
                 break
             prev_V = V.copy()
@@ -240,13 +240,13 @@ class PolicyIterator():
                                     q += (1/3)*gamma*prob*V[next_state][raised+1]
                                 elif a2 == 'call' and a1 == 'raise':
                                     q += (1/3)*gamma*prob*V[next_state][raised+1]
-                    Q[self.FIRST_ROUND][s][a1] += self.policy[player_id][self.FIRST_ROUND][s][a1]*q
+                    Q[self.FIRST_ROUND][s][action_code[a1]] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
             else: # for second round
                 for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                         for a1 in actions:
                             q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
-                            Q[s][raised+1][a1] += self.policy[player_id][raised+1][s][a1]*q
+                            Q[s][raised+1][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
         new_pi = Q.copy() # since pi is an array and not a function for us, should work
         return new_pi
     
