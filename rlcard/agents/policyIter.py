@@ -188,7 +188,7 @@ class PolicyIterator():
                         if a1 == 'raise':
                             raised += 1
                         # Bellman Step
-                        q = R[player_id][self.FIRST_ROUND][s][action_code[a1]]
+                        q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
                         if(a1 != 'fold'):
                             for next_state in range(len(self.P[s])):
                                 prob = self.P[s][next_state]
@@ -205,7 +205,7 @@ class PolicyIterator():
                 else: # for second round
                     for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                         for a1 in actions:
-                            q = R[player_id][raised+1][s][action_code[a1]]
+                            q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
                             V[s][raised+1] += policy[player_id][raised+1][s][a1]*q
             if np.max(np.abs(V - prev_V)) < epsilon:
@@ -227,7 +227,7 @@ class PolicyIterator():
                     if a1 == 'raise':
                         raised += 1
                     # Bellman Step
-                    q = R[player_id][self.FIRST_ROUND][s][action_code[a1]]
+                    q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
                     if(a1 != 'fold'):
                         for next_state in range(len(self.P[s])):
                             prob = self.P[s][next_state]
@@ -244,7 +244,7 @@ class PolicyIterator():
             else: # for second round
                 for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                         for a1 in actions:
-                            q = R[player_id][raised+1][s][action_code[a1]]
+                            q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
                             Q[s][raised+1][a1] += policy[player_id][raised+1][s][a1]*q
         new_pi = Q.copy() # since pi is an array and not a function for us, should work
