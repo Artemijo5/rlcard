@@ -42,14 +42,12 @@ class PolicyIterator():
         # 4 possible (attempted) actions
         # In total: 80 state-action combos
         self.R = np.zeros((2, 4,self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
-        # TODO either fill in P's manually, or add the function that fills them on init
         self.P1 = 0
         self.P2 = 1
         # self.FIRST_ROUND also works for the index here
         self.NONE_RAISED = 1
         self.ONE_RAISED = 2
         self.TWO_RAISED = 3
-        #self.fillInRewardTable()
 
         # State Transition Probability Table
         # only needed for first round states - second round states are guaranteed final
