@@ -16,6 +16,7 @@ class PolicyIterator():
         self.model_path = model_path
 
         self.evaluated = False
+        self.num_actions = 4 # self.env.num_actions
 
         # state encoding:
         self.POSSIBLE_STATES = 20
@@ -34,14 +35,14 @@ class PolicyIterator():
         self.policy = init_pi
         # If no policy is provided, assume a random policy with uniform probability
         if init_pi == None:
-            self.policy = np.array([[[[1.0/self.env.num_actions]*self.env.num_actions]*self.POSSIBLE_STATES]*4 for _ in range(2)])
+            self.policy = np.array([[[[1.0/self.num_actions]*self.num_actions]*self.POSSIBLE_STATES]*4 for _ in range(2)])
         
         # State-Action Average Reward table, which will be filled prior to the actual algorithm
         # Assumes random adversary
         # 5 cards, can be either in 1st round, as high card, double, or third -> 20 states
         # 4 possible (attempted) actions
         # In total: 80 state-action combos
-        self.R = np.zeros((2, 4,self.POSSIBLE_STATES, self.env.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
+        self.R = np.zeros((2, 4,self.POSSIBLE_STATES, self.num_actions), dtype = np.float64) # reward amassed from enounters of s-a
         self.P1 = 0
         self.P2 = 1
         # self.FIRST_ROUND also works for the index here
