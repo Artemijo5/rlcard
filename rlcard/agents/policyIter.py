@@ -441,7 +441,6 @@ class PolicyIterator():
                                     Pr2[state][action[action2]] += tokens_in + 0.25
                                 else:
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
-                                    #Pr2[state][action[action2]] += tokens_in
                             elif action1 == 'check':
                                 if action2 == 'check':
                                     # no immediate reward or loss
