@@ -573,7 +573,7 @@ class PolicyIterator():
 
                     for pid in range(2):
                         for raised in range(3):
-                            if Pn[pid][raised+1][s][a] == 0:
+                            if Pn[pid][raised][s][a] == 0:
                                 self.R[pid][raised+1][s][a] = 0.0
                             else:
                                 self.R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
