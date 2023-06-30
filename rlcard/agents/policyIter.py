@@ -190,8 +190,8 @@ class PolicyIterator():
                         # Bellman Step
                         q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
                         if(a1 != 'fold'):
-                            for next_state in range(len(self.P[s])):
-                                prob = self.P[s][next_state]
+                            for next_state in range(len(self.P_next[s])):
+                                prob = self.P_next[s][next_state]
                                 for a2 in actions: # adversary's action
                                     # in each case, multiply by 1/3
                                     if a2 == 'raise':
@@ -229,8 +229,8 @@ class PolicyIterator():
                     # Bellman Step
                     q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
                     if(a1 != 'fold'):
-                        for next_state in range(len(self.P[s])):
-                            prob = self.P[s][next_state]
+                        for next_state in range(len(self.P_next[s])):
+                            prob = self.P_next[s][next_state]
                             for a2 in actions: # adversary's action
                                 # in each case, multiply by 1/3
                                 if a2 == 'raise':
