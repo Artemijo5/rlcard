@@ -254,7 +254,9 @@ class PolicyIterator():
         ### TODO correct the below formula to make it work
         for raised in range(4):
             ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
-            new_pi[raised][:] = {ret_func(s) for s in range(self.POSSIBLE_STATES)}
+            for s in range(self.POSSIBLE_STATES):
+                for a in range(4):
+                    new_pi[raised][s][a] = ret_func(s)[a]
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
