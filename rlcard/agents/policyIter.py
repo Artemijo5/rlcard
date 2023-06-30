@@ -251,7 +251,7 @@ class PolicyIterator():
                             q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
                             Q[raised+1][s][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
-        ### TODO correct the below formula to make it work
+        ### TODO figure out how the following is supposed to work...
         for raised in range(4):
             ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
             for s in range(self.POSSIBLE_STATES):
