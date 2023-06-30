@@ -217,7 +217,7 @@ class PolicyIterator():
                 self.Vplot[j,:,t] = prev_V[:,j]  # accounting for GUI
         return V
 
-    def policyImprovement(self, V, player_id = 0, gamma):
+    def policyImprovement(self, V, player_id = 0, gamma = 1.0):
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
