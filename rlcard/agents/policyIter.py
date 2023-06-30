@@ -229,8 +229,8 @@ class PolicyIterator():
                     if a1 == 'raise':
                         raised += 1
                     # Bellman Step
-                    ac = action_code[a1]
-                    q = 0.0 #self.R[player_id][self.FIRST_ROUND][s][ac]
+                    ac = 0
+                    q = self.R[player_id][self.FIRST_ROUND][s][ac]
                     if(a1 != 'fold'):
                         for next_state in range(len(self.P_next[s])):
                             prob = self.P_next[s][next_state]
