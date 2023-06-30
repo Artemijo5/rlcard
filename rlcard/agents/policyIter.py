@@ -15,6 +15,8 @@ class PolicyIterator():
         self.env = rlcard.make('limit-holdem')
         self.model_path = model_path
 
+        self.evaluated = False
+
         # state encoding:
         self.POSSIBLE_STATES = 20
         self.A_s = 0
@@ -32,7 +34,7 @@ class PolicyIterator():
         self.policy = init_pi
         # If no policy is provided, assume a random policy with uniform probability
         if init_pi == None:
-            self.policy = np.array([[1.0/self.env.num_actions]*self.env.num_actions for _ in range(self.POSSIBLE_STATES)])
+            self.policy = np.array([[[[1.0/self.env.num_actions]*self.env.num_actions]*self.POSSIBLE_STATES]*4 for _ in range(2)])
         
         # State-Action Average Reward table, which will be filled prior to the actual algorithm
         # Assumes random adversary
@@ -172,18 +174,6 @@ class PolicyIterator():
         Pplot = np.zeros((size,Tmax)) #these keep track how the Policy evolves, to be used in the GUI
         t = 0
 
-    
-    def fillInRewardTable(P = self.P, R = self.R):
-        for t in range(runs):
-            # TODO either add exhaustive code here or fill reward table manually
-            '''
-            Run 1 game.
-            Get states & rewards.
-            Fill in the appropriate slots of P.
-            '''
-            print('WIP')
-
-
     def decideAccordingToPolicy(s, pi = self.policy):
         '''Use pi to make a decision, if not legal then make appropriate decision'''
         print('WIP')
@@ -191,6 +181,7 @@ class PolicyIterator():
 
 
     def policyEval(player_id = self.P1, pi = self.policy, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
+        '''
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
@@ -221,8 +212,11 @@ class PolicyIterator():
             t += 1
             Vplot[:,t] = prev_V  # accounting for GUI
         return V
+        '''
+        print('WIP')
 
     def policyImprovement(V, player_id = 0, Pn = self.Pn, Pr = self.Pr):
+        '''
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
@@ -243,12 +237,16 @@ class PolicyIterator():
         new_pi = lambda s: {s:a for s, a in enumerate(np.argmax(Q, axis=1))}[s]
 
         return new_pi
+        '''
+        print('WIP')
     
     def policyIteration(player_id = 0, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
+        '''
         t = 0
 
         while True:
             old_pi = {s: pi(s) for s in range(len(P))}  #keep the old policy to compare with new
+            self.fillInRewardTableRandom(old_pi, R)
             V = policy_evaluation(player_id, pi, P, R, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
             pi = policy_improvement(player_id, V, P, R, gamma)          #get a better policy using the value function of the previous one just calculated 
             
@@ -259,7 +257,10 @@ class PolicyIterator():
             if old_pi == {s:pi(s) for s in range(len(P))}: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
+        self.evaluated = True
         return V,pi
+        '''
+        print('WIP')
     
     def valueIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
         '''Value Iteration'''
@@ -301,12 +302,291 @@ class PolicyIterator():
         
         return 4*card + quant
 
+    def get_state_Sim(hand, table):
+        if(table == None or len(table)==0):
+            return 4*cards[hand]
+        else:
+            if(table[0]==hand or table[1]==hand):
+            if(table[0]==table[1]):
+                return 4*cards[hand] + quant['T']
+            else:
+                return 4*cards[hand] + quant['D']
+            elif(table[0]==table[1]):
+                return 4*cards[table[0]] + quant['D']
+            else:
+            if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
+                return 4*cards['A'] + quant['H']
+            elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
+                return 4*cards['K'] + quant['H']
+            else:
+                return 4*cards['Q'] + quant['H']
+    
+    def compareHands(hand1, hand2, table):
+        '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
+        state1 = get_state_Sim(hand1, table)
+        state2 = get_state_Sim(hand2, table)
+
+        if state1 == state2:
+            if hand1 == hand2:
+                return 0
+            elif cards[hand1] > cards[hand2]:
+                return -1
+            else:
+                return 1
+        elif state1 %4 == state2 %4:
+            if state1 > state2:
+                return -1
+            else:
+                return 1
+        elif state1 %4 > state2 %4:
+            return 1
+        else:
+            return -1
+
+
     def get_reward(self, player_id):
         reward = self.env.get_payoffs()[player_id]
         return reward
         
-        
-    
+
+    def fillInRewardTableRandom(init_policy = self.policy, R = self.R):
+        for t in range(runs):
+            
+            '''
+            Exhaustively simulate every possible game state with current policy, to fill in table of rewards.
+            '''
+            # For player 1, round 1:
+            Pn1 = np.zeros((20, 4), dtype = np.int8) # times s-a has been encountered
+            Pr1 = np.zeros((20, 4), dtype = np.float64) # reward amassed from enounters of s-a
+            # For player 2, round 1:
+            Pn2 = np.zeros((20, 4), dtype = np.int8) # times s-a has been encountered
+            Pr2 = np.zeros((20, 4), dtype = np.float64) # reward amassed from enounters of s-a
+            # For both players, round 2, tracking how much has been raised:
+            Pn = np.zeros((2, 3, 20, 4), dtype = np.int8) # times s-a has been encountered
+            Pr = np.zeros((2, 3, 20, 4), dtype = np.float64) # average reward from enounters of s-a
+
+            # First, 2 loops to cover all the first round scenarios:
+            tokens_in = 0.5 # ante
+            # wrt first round, only fold really matters
+
+            # first, agent as player 1
+            for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
+                state = get_state_Sim(hand1, None)
+                chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
+                chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                chanceOFCallingAfter = init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+
+                for hand2  in {'A', 'K', 'Q', 'J', 'T'}: #adversary
+                    for action1 in {'call', 'raise', 'fold', 'check'}: # agent
+                        for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
+                            if(action1 == 'call' and action2 == 'raise'): # action1 can only be call after 2 was raise
+                                Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                            # no immediate reward or loss
+                            elif(action1 == 'raise'):
+                                # if player 2 folds, immediate reward
+                                # if player 2 raises, chance of folding afterwards -> loss of raised tokens
+                                # if player 2 calls, no immediate reward or loss
+                                if(action2 == 'fold'):
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                    Pr1[state][action[action1]] += tokens_in
+                                elif(action2 == 'raise'):
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                    Pr1[state][action[action1]] -= (tokens_in + 1)*chanceOfFoldingAfter
+                            elif(action1 == 'fold'):
+                                if(action2 == 'raise'):
+                                    # there is a chance we fold before raise, or after
+                                    # if after, there is a chance we had raised or checked earlier
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                    Pr1[state][action[action1]] -= tokens_in + chanceOfRaisingFirst*1
+                                else:
+                                    # loss is tokens_in
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                    Pr1[state][action[action1]] -= tokens_in
+                            else: # action1 == 'check'
+                                if(action2 == 'raise'):
+                                    # there is a chance we fold afterwards and lose the initial token
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                    Pr1[state][action[action1]] -= (tokens_in)*chanceOfFoldingAfter
+                                elif(action2 == 'fold'): # immediate reward of the initial token
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                    Pr1[state][action[action1]] += tokens_in
+                                elif(action2 == 'check'): # cannot be call
+                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+
+            # secondly, agent as player 2
+            for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # agent
+                    state = get_state_Sim(hand2, None)
+                    for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
+                        for action2 in {'call', 'raise', 'fold', 'check'}: # agent
+                            # ignore case where p1 calls - no reward or loss from there
+                            if action1 == 'raise':
+                                if action2 == 'call':
+                                    # no immediate reward or loss
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                elif action2 == 'raise':
+                                    # 50% chance that p1 folds afterwards
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                    Pr2[state][action[action2]] += 0.5*(tokens_in + 1)
+                                elif action2 == 'fold':
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                    Pr2[state][action[action2]] -= tokens_in
+                            elif action1 == 'fold':
+                                if action2 == 'raise':
+                                    # 50% chance the fold is done after the raise
+                                    # in which case, 50% chance there was already a raise before
+                                    # the other 50% chance is that the fold is done before the raise
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                    Pr2[state][action[action2]] += tokens_in + 0.25
+                                else:
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                    Pr2[state][action[action2]] += tokens_in
+                            elif action1 == 'check':
+                                if action2 == 'check':
+                                    # no immediate reward or loss
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                elif action2 == 'raise':
+                                    # 50% chance p1 will fold afterwards
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                    Pr2[state][action[action2]] += 0.5*(tokens_in)
+                                elif action2 == 'fold':
+                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
+                                    Pr2[state][action[action2]] -= tokens_in
+
+            # now for round 2
+
+            # first, if agent is player1
+            for tokens_in in {0.5, 1.5, 2.5}: # all possibilities for initial tokens
+                t_index = int(np.floor(tokens_in)) # representative of the number of raises in the first round
+                for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
+                    for table1 in {'A', 'K', 'Q', 'J', 'T'}:
+                        for table2  in {'A', 'K', 'Q', 'J', 'T'}:
+                            table = [table1, table2]
+                            state = get_state_Sim(hand1, table)
+                            for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                                win = compareHands(hand1, hand2, table) # 1 if p1 has better hand, -1 if p2 has better hand, 0 if same hand
+                                for action1 in {'call', 'raise', 'fold', 'check'}: # agent
+                                    for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
+                                        chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['call']])
+                                        chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                                        chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                                        if action1 == 'call':
+                                            if action2 == 'raise':
+                                                # p1 can call only after p2 raised
+                                                # there is a chance p1 had raised before
+                                                # win or lose 1 raised token, + a second raised token times that chance
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] += (tokens_in + 1)*win*chanceOfRaisingFirst
+                                        elif action1 == 'raise':
+                                            if(action2 == 'raise'):
+                                                # there is a chance we fold afterwards and lose the raised token
+                                                # or we call, and win or lose the doubly raised token
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] -= (tokens_in + 1)*chanceOfFoldingAfter
+                                                Pr[0][t_index][state][action[action1]] += (tokens_in + 2)*win*chanceOfCallingAfter
+                                            elif(action2 == 'fold'): # immediate reward of the initial token
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] += tokens_in
+                                            elif(action2 == 'call'): # cannot be check
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] += (tokens_in+1)*win
+                                        elif action1 == 'fold':
+                                            if action2 == 'raise':
+                                                # chance we had raised before
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] -= tokens_in + chanceOfRaisingFirst*1
+                                            else:
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] -= tokens_in
+                                        elif action1 == 'check':
+                                            if(action2 == 'raise'):
+                                                # there is a chance we fold afterwards and lose the initial token
+                                                # or we call, and win or lose the raised token
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] -= (tokens_in)*chanceOfFoldingAfter
+                                                Pr[0][t_index][state][action[action1]] += (tokens_in + 1)*win*chanceOfCallingAfter
+                                            elif(action2 == 'fold'): # immediate reward of the initial token
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] += tokens_in
+                                            elif(action2 == 'check'): # cannot be call
+                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                Pr[0][t_index][state][action[action1]] += tokens_in*win
+
+            # secondly, if agent is p2
+            for tokens_in in {0.5, 1.5, 2.5}: # all possibilities for initial tokens
+                t_index = int(np.floor(tokens_in)) # representative of the number of raises in the first round
+                for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                    for table1 in {'A', 'K', 'Q', 'J', 'T'}:
+                        for table2  in {'A', 'K', 'Q', 'J', 'T'}:
+                            table = [table1, table2]
+                            for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # agent
+                                state = get_state_Sim(hand2, table)
+                                win = compareHands(hand2, hand1, table) # 1 if p2 has better hand, -1 if p1 has better hand, 0 if same hand
+                                for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
+                                    for action2 in {'call', 'raise', 'fold', 'check'}: # agent
+                                    if action1 == 'call':
+                                        if action2 == 'raise':
+                                            # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += (tokens_in + 0.5)*win
+                                    elif action1 == 'raise':
+                                        if(action2 == 'raise'):
+                                            # there is a 50% chance p1 will later call, 50% chance they will fold
+                                            # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
+                                            # if call, see above case
+                                            # if fold, p2 immediately wins 0.5 raised token
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 0.5)*win
+                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)*win
+                                        elif(action2 == 'fold'): # immediate loss of the initial token
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] -= tokens_in
+                                        elif(action2 == 'call'): # cannot be check
+                                            # 1 raised token
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += (tokens_in + 1)*win
+                                    elif action1 == 'fold':
+                                        if action2 == 'raise':
+                                            # 50% chance p1 had raised before
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += tokens_in + 0.25
+                                        else:
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += tokens_in
+                                    elif action1 == 'check':
+                                        if(action2 == 'raise'):
+                                            # 50% chance p1 will fold, 50% chance p1 will call
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)
+                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in+1)*win
+                                        elif(action2 == 'fold'): # immediate loss of the initial token
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] -= tokens_in
+                                        elif(action2 == 'check'): # cannot be call
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += (tokens_in)*win
+            
+
+
+            for s in range(20):
+                for a in range(4):
+                    if Pn1[s][a] == 0:
+                        R[self.P1][self.FIRST_ROUND][s][a] = 0.0
+                    else:
+                        R[self.P1][self.FIRST_ROUND][s][a] = Pr1[s][a] / np.abs(Pn1[s][a])
+
+                    if Pn2[s][a] == 0:
+                        R[self.P2][self.FIRST_ROUND][s][a] = 0.0
+                    else:
+                        R[self.P2][self.FIRST_ROUND][s][a] = Pr2[s][a] / np.abs(Pn2[s][a])
+
+                    for pid in range(2):
+                        for raised in range(3):
+                            if Pn[pid][raised+1][s][a] == 0:
+                                R[pid][raised+1][s][a] = 0.0
+                            else:
+                                R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
+  
 
     def step(self, state):
         print('WIP')
