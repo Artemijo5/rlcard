@@ -313,8 +313,8 @@ class PolicyIterator():
     
     def compareHands(self, hand1, hand2, table):
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
-        state1 = get_state_Sim(hand1, table)
-        state2 = get_state_Sim(hand2, table)
+        state1 = self.get_state_Sim(hand1, table)
+        state2 = self.get_state_Sim(hand2, table)
         cards = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
 
         if state1 == state2:
@@ -362,7 +362,7 @@ class PolicyIterator():
 
             # first, agent as player 1
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
-                state = get_state_Sim(hand1, None)
+                state = self.get_state_Sim(hand1, None)
                 chanceOfRaisingFirst = self.init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
                 chanceOfFoldingAfter = self.init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
                 chanceOFCallingAfter = self.init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
@@ -406,7 +406,7 @@ class PolicyIterator():
             # secondly, agent as player 2
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # agent
-                    state = get_state_Sim(hand2, None)
+                    state = self.get_state_Sim(hand2, None)
                     for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
                         for action2 in {'call', 'raise', 'fold', 'check'}: # agent
                             # ignore case where p1 calls - no reward or loss from there
@@ -452,9 +452,9 @@ class PolicyIterator():
                     for table1 in {'A', 'K', 'Q', 'J', 'T'}:
                         for table2  in {'A', 'K', 'Q', 'J', 'T'}:
                             table = [table1, table2]
-                            state = get_state_Sim(hand1, table)
+                            state = self.get_state_Sim(hand1, table)
                             for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # adversary
-                                win = compareHands(hand1, hand2, table) # 1 if p1 has better hand, -1 if p2 has better hand, 0 if same hand
+                                win = self.compareHands(hand1, hand2, table) # 1 if p1 has better hand, -1 if p2 has better hand, 0 if same hand
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
                                         self.chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['call']])
@@ -510,8 +510,8 @@ class PolicyIterator():
                         for table2  in {'A', 'K', 'Q', 'J', 'T'}:
                             table = [table1, table2]
                             for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # agent
-                                state = get_state_Sim(hand2, table)
-                                win = compareHands(hand2, hand1, table) # 1 if p2 has better hand, -1 if p1 has better hand, 0 if same hand
+                                state = self.get_state_Sim(hand2, table)
+                                win = self.compareHands(hand2, hand1, table) # 1 if p2 has better hand, -1 if p1 has better hand, 0 if same hand
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # agent
                                         if action1 == 'call':
