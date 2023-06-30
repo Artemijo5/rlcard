@@ -250,7 +250,7 @@ class PolicyIterator():
                             q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
                             Q[raised+1][s][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
-        new_pi = Q.copy() # since pi is an array and not a function for us, should work
+        new_pi = Q.copy() # TODO use the correct formula, whatever that is
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
