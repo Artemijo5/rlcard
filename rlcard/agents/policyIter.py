@@ -377,7 +377,6 @@ class PolicyIterator():
                 chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
                 chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
                 chanceOFCallingAfter = init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
-
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: #adversary
                     for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                         for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
