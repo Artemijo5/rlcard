@@ -525,47 +525,47 @@ class PolicyIterator():
                                 win = compareHands(hand2, hand1, table) # 1 if p2 has better hand, -1 if p1 has better hand, 0 if same hand
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # agent
-                                    if action1 == 'call':
-                                        if action2 == 'raise':
-                                            # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += (tokens_in + 0.5)*win
-                                    elif action1 == 'raise':
-                                        if(action2 == 'raise'):
-                                            # there is a 50% chance p1 will later call, 50% chance they will fold
-                                            # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
-                                            # if call, see above case
-                                            # if fold, p2 immediately wins 0.5 raised token
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 0.5)*win
-                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)*win
-                                        elif(action2 == 'fold'): # immediate loss of the initial token
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] -= tokens_in
-                                        elif(action2 == 'call'): # cannot be check
-                                            # 1 raised token
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += (tokens_in + 1)*win
-                                    elif action1 == 'fold':
-                                        if action2 == 'raise':
-                                            # 50% chance p1 had raised before
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += tokens_in + 0.25
-                                        else:
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += tokens_in
-                                    elif action1 == 'check':
-                                        if(action2 == 'raise'):
-                                            # 50% chance p1 will fold, 50% chance p1 will call
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)
-                                            Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in+1)*win
-                                        elif(action2 == 'fold'): # immediate loss of the initial token
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] -= tokens_in
-                                        elif(action2 == 'check'): # cannot be call
-                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                            Pr[1][t_index][state][action[action2]] += (tokens_in)*win
+                                        if action1 == 'call':
+                                            if action2 == 'raise':
+                                                # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += (tokens_in + 0.5)*win
+                                        elif action1 == 'raise':
+                                            if(action2 == 'raise'):
+                                                # there is a 50% chance p1 will later call, 50% chance they will fold
+                                                # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
+                                                # if call, see above case
+                                                # if fold, p2 immediately wins 0.5 raised token
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 0.5)*win
+                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)*win
+                                            elif(action2 == 'fold'): # immediate loss of the initial token
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] -= tokens_in
+                                            elif(action2 == 'call'): # cannot be check
+                                                # 1 raised token
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += (tokens_in + 1)*win
+                                        elif action1 == 'fold':
+                                            if action2 == 'raise':
+                                                # 50% chance p1 had raised before
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += tokens_in + 0.25
+                                            else:
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += tokens_in
+                                        elif action1 == 'check':
+                                            if(action2 == 'raise'):
+                                                # 50% chance p1 will fold, 50% chance p1 will call
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)
+                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in+1)*win
+                                            elif(action2 == 'fold'): # immediate loss of the initial token
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] -= tokens_in
+                                            elif(action2 == 'check'): # cannot be call
+                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                                Pr[1][t_index][state][action[action2]] += (tokens_in)*win
             
 
 
