@@ -255,6 +255,7 @@ class PolicyIterator():
         for raised in range(4):
             ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
             for s in range(self.POSSIBLE_STATES):
+                print(ret_func(s))
                 for a in range(4):
                     new_pi[raised][s][a] = ret_func(s)[a]
         return new_pi
