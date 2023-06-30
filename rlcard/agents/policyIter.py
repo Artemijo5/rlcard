@@ -263,8 +263,9 @@ class PolicyIterator():
             self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
-            self.Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
-            self.Vplot[:,:,t] = V                              #and the value function evolution (for the GUI)
+            self.Pplot[:,:,t]= [pi(s) for s in range(self.POSSIBLE_STATES)]  #keep track of the policy evolution
+            for j in range(4):
+                self.Vplot[j,:,t] = prev_V[:,j]  # accounting for GUI
         
             if old_pi == self.policy[player_id][:][:][:]: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
                 break
