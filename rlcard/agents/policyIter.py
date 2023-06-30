@@ -217,7 +217,7 @@ class PolicyIterator():
                 self.Vplot[j,:,t] = prev_V[:,j]  # accounting for GUI
         return V
 
-    def policyImprovement(self, player_id = 0, V, gamma = 1.0):
+    def policyImprovement(self, V, player_id = 0, gamma = 1.0):
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
@@ -260,7 +260,7 @@ class PolicyIterator():
             old_pi = self.policy[player_id][:][:][:] #keep the old policy to compare with new
             self.fillInRewardTableRandom()
             V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
-            self.policy[player_id] = self.policyImprovement(player_id, V, gamma)          #get a better policy using the value function of the previous one just calculated 
+            self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
             self.Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
