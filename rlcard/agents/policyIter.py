@@ -271,7 +271,7 @@ class PolicyIterator():
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated[player_id] = True
-        return V,pi
+        return V, self.policy
     
     def valueIteration(self, gamma = 1.0, epsilon = 1e-10):
         print('WIP')
