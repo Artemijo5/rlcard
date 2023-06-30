@@ -10,9 +10,9 @@ class PolicyIterator():
     '''Implement Policy Iteration, for the simplified limit-holdem
     '''
 
-    def __init__(self, init_pi = None, gamma = 1.0, epsilon = 1e-10, model_path='.pol_iter_model'):
+    def __init__(self, env = None, init_pi = None, gamma = 1.0, epsilon = 1e-10, model_path='.pol_iter_model'):
         self.use_raw = False
-        self.env = rlcard.make('limit-holdem')
+        self.env = env
         self.model_path = model_path
 
         self.evaluated = False
