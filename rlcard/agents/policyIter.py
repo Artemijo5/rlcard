@@ -230,9 +230,13 @@ class PolicyIterator():
                         raised += 1
                     # Bellman Step
                     ac = action_code[a1]
+                    print('player id')
                     print(player_id)
+                    print('round')
                     print(self.FIRST_ROUND)
+                    print('state')
                     print(s)
+                    print('action')
                     print(ac)
                     print(self.R[player_id][self.FIRST_ROUND][s][ac])
                     q = self.R[player_id][self.FIRST_ROUND][s][ac]
