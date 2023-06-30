@@ -171,15 +171,13 @@ class PolicyIterator():
         Vplot = np.zeros((size,Tmax)) #these keep track how the Value function evolves, to be used in the GUI
         Pplot = np.zeros((size,Tmax)) #these keep track how the Policy evolves, to be used in the GUI
         t = 0
-
+    '''
     def decideAccordingToPolicy(s, pi = self.policy):
-        '''Use pi to make a decision, if not legal then make appropriate decision'''
         print('WIP')
 
 
 
     def policyEval(player_id = self.P1, pi = self.policy, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
-        '''
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
@@ -210,11 +208,8 @@ class PolicyIterator():
             t += 1
             Vplot[:,t] = prev_V  # accounting for GUI
         return V
-        '''
-        print('WIP')
 
     def policyImprovement(V, player_id = 0, Pn = self.Pn, Pr = self.Pr):
-        '''
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
@@ -235,11 +230,8 @@ class PolicyIterator():
         new_pi = lambda s: {s:a for s, a in enumerate(np.argmax(Q, axis=1))}[s]
 
         return new_pi
-        '''
-        print('WIP')
     
     def policyIteration(player_id = 0, P = self.P, R = self.R, gamma = 1.0, epsilon = 1e-10):
-        '''
         t = 0
 
         while True:
@@ -257,16 +249,12 @@ class PolicyIterator():
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated = True
         return V,pi
-        '''
-        print('WIP')
     
     def valueIteration(Pn = self.Pn, Pr = self.Pr, gamma = 1.0, epsilon = 1e-10):
-        '''Value Iteration'''
         print('WIP')
 
 
     def get_state(self, player_id):
-        '''Get the "state" of the player, ie the highest card in their hand + quantity/round'''
         state = self.env.get_state(player_id)
         state = state['raw_obs']
         hand = state['hand'][0][1]
@@ -299,8 +287,8 @@ class PolicyIterator():
                     card = card_states['Q']
         
         return 4*card + quant
-
-    def get_state_Sim(hand, table):
+    '''
+    def get_state_Sim(self, hand, table):
         cards = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
         quant = {'F': self.FIRST_ROUND, 'H': self.HIGH_CARD, 'D': self.DOUBLE, 'T': self.TRIPLE}
 
@@ -322,7 +310,7 @@ class PolicyIterator():
                 else:
                     return 4*cards['Q'] + quant['H']
     
-    def compareHands(hand1, hand2, table):
+    def compareHands(self, hand1, hand2, table):
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
         state1 = get_state_Sim(hand1, table)
         state2 = get_state_Sim(hand2, table)
@@ -351,7 +339,7 @@ class PolicyIterator():
         return reward
         
 
-    def fillInRewardTableRandom(init_policy = self.policy, R = self.R):
+    def fillInRewardTableRandom(self, init_policy = self.policy, R = self.R):
             action = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
             
             '''
