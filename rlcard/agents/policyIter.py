@@ -222,6 +222,7 @@ class PolicyIterator():
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
         Q = np.zeros((4, self.POSSIBLE_STATES, 4))
+        new_pi = np.zeros((4, self.POSSIBLE_STATES, 4))
         for s in range(self.POSSIBLE_STATES):
             if s%4 == 0: # for first round
                 for a1 in actions:
@@ -250,7 +251,9 @@ class PolicyIterator():
                             q = self.R[player_id][raised+1][s][action_code[a1]]
                             # game lasts two rounds, so no next state
                             Q[raised+1][s][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
-        new_pi = Q.copy() # TODO use the correct formula, whatever that is
+        for raised in range(4):
+            ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
+            new_pi[raised][:] = {ret_func(s) for s in range(self.POSSIBLE_STATES)}
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
