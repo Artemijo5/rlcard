@@ -197,6 +197,7 @@ class PolicyIterator():
                                     if a2 == 'raise':
                                         raised += 1
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
+                                        raised -= 1
                                     elif a2 == 'check' and a1 == 'check':
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
                                     elif a2 == 'call' and a1 == 'raise':
@@ -236,6 +237,7 @@ class PolicyIterator():
                                 if a2 == 'raise':
                                     raised += 1
                                     q += (1/3)*gamma*prob*V[next_state][raised+1]
+                                    raised -= 1
                                 elif a2 == 'check' and a1 == 'check':
                                     q += (1/3)*gamma*prob*V[next_state][raised+1]
                                 elif a2 == 'call' and a1 == 'raise':
