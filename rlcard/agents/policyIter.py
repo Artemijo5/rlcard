@@ -169,8 +169,8 @@ class PolicyIterator():
         # PLOTTING
         self.size = self.POSSIBLE_STATES
         self.Tmax = 100000
-        self.Vplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
-        self.Pplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
+        self.Vplot = np.zeros((2, 4, self.size, self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
+        self.Pplot = np.zeros((2, 4, self.size, 4, self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
         self.t = 0
     
     def policyEval(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
@@ -263,7 +263,7 @@ class PolicyIterator():
             self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
-            self.Pplot[:,:,:,t] = self.policy[player_id][:][:][:]  #keep track of the policy evolution
+            self.Pplot[player_id,:,:,:,t] = self.policy[player_id][:][:][:]  #keep track of the policy evolution
             for j in range(4):
                 self.Vplot[j,:,t] = prev_V[:,j]  # accounting for GUI
         
