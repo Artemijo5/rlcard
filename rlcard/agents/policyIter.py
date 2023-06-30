@@ -219,7 +219,7 @@ class PolicyIterator():
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
-        Q = np.zeros(4, self.POSSIBLE_STATES, 4))
+        Q = np.zeros((4, self.POSSIBLE_STATES, 4))
         for s in range(self.POSSIBLE_STATES):
             if s%4 == 0: # for first round
                 for a1 in actions:
