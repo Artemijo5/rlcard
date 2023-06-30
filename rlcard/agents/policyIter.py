@@ -167,10 +167,10 @@ class PolicyIterator():
         }
 
         # PLOTTING
-        size = self.POSSIBLE_STATES
+        self.size = self.POSSIBLE_STATES
         self.Tmax = 100000
-        Vplot = np.zeros((size,Tmax)) #these keep track how the Value function evolves, to be used in the GUI
-        Pplot = np.zeros((size,Tmax)) #these keep track how the Policy evolves, to be used in the GUI
+        Vplot = np.zeros((self.size,self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
+        Pplot = np.zeros((self.size,self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
         t = 0
     '''
     def decideAccordingToPolicy(s, pi = self.policy):
