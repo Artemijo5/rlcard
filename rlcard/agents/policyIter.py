@@ -234,6 +234,7 @@ class PolicyIterator():
                     print(self.FIRST_ROUND)
                     print(s)
                     print(ac)
+                    print(self.R[player_id][self.FIRST_ROUND][s][ac])
                     q = self.R[player_id][self.FIRST_ROUND][s][ac]
                     if(a1 != 'fold'):
                         for next_state in range(len(self.P_next[s])):
