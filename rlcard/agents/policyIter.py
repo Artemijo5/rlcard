@@ -169,15 +169,15 @@ class PolicyIterator():
         # PLOTTING
         self.size = self.POSSIBLE_STATES
         self.Tmax = 100000
-        Vplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
-        Pplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
-        t = 0
+        self.Vplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Value function evolves, to be used in the GUI
+        self.Pplot = np.zeros((4, self.size, self.Tmax)) #these keep track how the Policy evolves, to be used in the GUI
+        self.t = 0
     
     def policyEval(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
         actions = {'call', 'raise', 'fold', 'check'}
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
 
-        t = 0
+        self.t = 0
         prev_V = np.zeros((self.POSSIBLE_STATES, 4))
         while True:
             V = np.zeros((self.POSSIBLE_STATES, 4))
@@ -212,7 +212,7 @@ class PolicyIterator():
             if np.max(np.abs(V - prev_V)) < epsilon:
                 break
             prev_V = V.copy()
-            t += 1
+            self.t += 1
             self.Vplot[:,:,t] = prev_V  # accounting for GUI
         return V
 
@@ -253,7 +253,7 @@ class PolicyIterator():
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
-        t = 0
+        self.t = 0
 
         while True:
             old_pi = self.policy[player_id][:][:][:] #keep the old policy to compare with new
@@ -261,7 +261,7 @@ class PolicyIterator():
             V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
             self.policy[player_id] = self.policyImprovement(player_id, V, gamma)          #get a better policy using the value function of the previous one just calculated 
             
-            t += 1
+            self.t += 1
             self.Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
             self.Vplot[:,:,t] = V                              #and the value function evolution (for the GUI)
         
