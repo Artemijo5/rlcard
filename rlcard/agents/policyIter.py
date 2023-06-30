@@ -303,8 +303,11 @@ class PolicyIterator():
         return 4*card + quant
 
     def get_state_Sim(hand, table):
+        cards = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
+        quant = {'F': self.FIRST_ROUND, 'H': self.HIGH_CARD, 'D': self.DOUBLE, 'T': self.TRIPLE}
+
         if(table == None or len(table)==0):
-            return 4*cards[hand]
+            return 4*cards[hand] + quant['F']
         else:
             if(table[0]==hand or table[1]==hand):
                 if(table[0]==table[1]):
@@ -325,6 +328,7 @@ class PolicyIterator():
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
         state1 = get_state_Sim(hand1, table)
         state2 = get_state_Sim(hand2, table)
+        cards = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
 
         if state1 == state2:
             if hand1 == hand2:
@@ -350,7 +354,7 @@ class PolicyIterator():
         
 
     def fillInRewardTableRandom(init_policy = self.policy, R = self.R):
-        for t in range(runs):
+            action = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
             
             '''
             Exhaustively simulate every possible game state with current policy, to fill in table of rewards.
