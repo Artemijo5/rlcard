@@ -307,19 +307,19 @@ class PolicyIterator():
             return 4*cards[hand]
         else:
             if(table[0]==hand or table[1]==hand):
-            if(table[0]==table[1]):
-                return 4*cards[hand] + quant['T']
-            else:
-                return 4*cards[hand] + quant['D']
+                if(table[0]==table[1]):
+                    return 4*cards[hand] + quant['T']
+                else:
+                    return 4*cards[hand] + quant['D']
             elif(table[0]==table[1]):
                 return 4*cards[table[0]] + quant['D']
             else:
-            if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
-                return 4*cards['A'] + quant['H']
-            elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
-                return 4*cards['K'] + quant['H']
-            else:
-                return 4*cards['Q'] + quant['H']
+                if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
+                    return 4*cards['A'] + quant['H']
+                elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
+                    return 4*cards['K'] + quant['H']
+                else:
+                    return 4*cards['Q'] + quant['H']
     
     def compareHands(hand1, hand2, table):
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
