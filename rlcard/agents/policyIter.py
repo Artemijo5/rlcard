@@ -254,16 +254,16 @@ class PolicyIterator():
         t = 0
 
         while True:
-            old_pi = policy[player_id][:][:][:] #keep the old policy to compare with new
+            old_pi = self.policy[player_id][:][:][:] #keep the old policy to compare with new
             self.fillInRewardTableRandom(old_pi, R)
-            V = policy_evaluation(player_id, pi, P, R, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
-            policy[player_id] = policy_improvement(player_id, V, P, R, gamma)          #get a better policy using the value function of the previous one just calculated 
+            V = self.policy_evaluation(player_id, pi, P, R, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
+            self.policy[player_id] = self.policy_improvement(player_id, V, P, R, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
-            Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
-            Vplot[:,:,t] = V                              #and the value function evolution (for the GUI)
+            self.Pplot[:,:,t]= [pi(s) for s in range(len(P))]  #keep track of the policy evolution
+            self.Vplot[:,:,t] = V                              #and the value function evolution (for the GUI)
         
-            if old_pi == policy[player_id][:][:][:]: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
+            if old_pi == self.policy[player_id][:][:][:]: # you have converged to the optimal policy if the "improved" policy is exactly the same as in the previous step
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated[player_id] = True
