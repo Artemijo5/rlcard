@@ -1,8 +1,4 @@
 import numpy as np
-import collections
-
-import os
-import pickle
 
 from rlcard.utils.utils import *
 
@@ -10,10 +6,9 @@ class PolicyIterator():
     '''Implement Policy Iteration, for the simplified limit-holdem
     '''
 
-    def __init__(self, env = None, init_pi = None, gamma = 1.0, epsilon = 1e-10, model_path='.pol_iter_model'):
+    def __init__(self, env = None, init_pi = None, gamma = 1.0, epsilon = 1e-10):
         self.use_raw = False
         self.env = env
-        self.model_path = model_path
 
         self.evaluated = [False, False] # for players 1 and 2
         self.num_actions = 4 # self.env.num_actions
@@ -404,13 +399,7 @@ class PolicyIterator():
         elif state1 %4 > state2 %4:
             return 1
         else:
-            return -1
-
-
-    def get_reward(self, player_id):
-        reward = self.env.get_payoffs()[player_id]
-        return reward
-        
+            return -1        
 
     def fillInRewardTableRandom(self):
             init_policy = self.policy
@@ -661,25 +650,6 @@ class PolicyIterator():
                                 self.R[pid][raised+1][s][a] = 0.0
                             else:
                                 self.R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
-  
-
-    def determine_pid(self, positionInAssignment):
-        '''
-        Call directly after env reset.
-        args:
-        env: the environment (assumed to be a limitholdem environment)
-        positionInAssignment: the index at which our agent is put into in env.set_agents()
-        '''
-        #player_array = self.env.game.players
-        #for j in range(len(player_array)):
-        #    if player_array[j].player_id == positionInAssignment:
-        #        return j
-        # j will be either 0 or 1
-        # our agent is p1 or p2, respectively
-        first_player = self.env.game.game_pointer
-        if positionInAssignment == first_player:
-            return 0
-        return 1
 
     def step(self, pid, state):
         s = self.get_state(pid)
@@ -710,12 +680,8 @@ class PolicyIterator():
                         return action_name[action]
         # the player cases could perhaps be fused into one, but this might be less confusing?
 
+        # TODO CHANGE PID IF P2 RAISES IN FIRST ROUND
+        # TODO THIS ALSO NEEDS TO BE REFLECTED IN THE POLICY
 
     def eval_step(self, pid, state):
         return self.step(pid, state)
-    
-    def save(self):
-        print('WIP')
-    
-    def load(self):
-        print('WIP')
