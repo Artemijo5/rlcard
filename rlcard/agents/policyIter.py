@@ -677,7 +677,7 @@ class PolicyIterator():
         # j will be either 0 or 1
         # our agent is p1 or p2, respectively
         first_player = self.env.game.game_pointer
-        if pid == first_player:
+        if positionInAssignment == first_player:
             return 0
         return 1
 
