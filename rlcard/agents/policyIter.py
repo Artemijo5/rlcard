@@ -274,7 +274,7 @@ class PolicyIterator():
         t = 0
 
         while True:
-            old_pi = self.policy[player_id][:][:][:].copy() #keep the old policy to compare with new
+            old_pi = self.policy[player_id].copy() #keep the old policy to compare with new
             self.fillInRewardTableRandom()
             V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
             self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
