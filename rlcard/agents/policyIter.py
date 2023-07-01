@@ -269,6 +269,34 @@ class PolicyIterator():
                 r_sum = np.sum(new_pi[raised][s][:])
                 if(r_sum != 0):
                     new_pi[raised][s][:] /= r_sum
+        # to make into deterministic policy:
+        # if player 1, options are either: raise check fold, or call fold
+        # if player 2, options are either: raise check fold, or raise call fold
+        # in either case, make the most probable from the 1st set have 0.55 probability
+        # the most probable from the 2nd set has 0.45 probability
+        # others have 0 probability, according to policy
+        # to make deterministic, when choosing an action during play, we pick the one with the highest policy prob
+        for raised in range(4):
+            for s in range(self.POSSIBLE_STATES):
+                pol = new_pi[raised][s]
+                if(not np.sum(pol[:]) == 0):
+                    # first, player1 case
+                    action1 = 0
+                    action2 = 0
+                    if player_id == self.P1:
+                        action1 = np.max([pol[1], pol[2], pol[3]])
+                        action2 = np.max([pol[0], pol[2]])
+                    else:
+                        action1 = np.max([pol[1], pol[2], pol[3]])
+                        action2 = np.max([pol[0], pol[1], pol[2]])
+                    for a in range(4):
+                        old = pol[a]
+                        pol[a] = 0
+                        if(old == action1):
+                            pol[a] += 0.55
+                        if(old == action2):
+                            pol[a] += 0.45
+                new_pi[raised][s] = pol[:]
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
@@ -290,7 +318,7 @@ class PolicyIterator():
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
                     for a in range(4):
-                        if abs(old_pi[raised][s][a] - self.policy[player_id][raised][s][a]) > 0.4:
+                        if old_pi[raised][s][a] == self.policy[player_id][raised][s][a]):
                             unchanged = False 
             if unchanged or t >= 100:
                 break
