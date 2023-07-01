@@ -289,16 +289,17 @@ class PolicyIterator():
                             pol[a] += 0.45
                 new_pi[raised][s] = pol[:]
         return new_pi
+    # TODO
+    # the problem lies here
+    # first fix logic above to make sure it works correctly
+    # but also, ensure each [s] of new_pi has 2 positions at most filled in
+    # perhaps could be done by picking the action with highest immediate reward in case of multiplicity...
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
         t = 0
 
         while True:
-            old_pi = np.zeros((4, self.POSSIBLE_STATES, 4)) #keep the old policy to compare with new
-            for raised in range(4):
-                for s in range(self.POSSIBLE_STATES):
-                    for a in range(4):
-                        old_pi[raised][s][a] = self.policy[player_id][raised][s][a]
+            old_pi = self.policy[player_id].copy()
             
             self.fillInRewardTableRandom()
             V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
