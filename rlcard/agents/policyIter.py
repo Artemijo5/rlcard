@@ -265,7 +265,7 @@ class PolicyIterator():
             for s in range(self.POSSIBLE_STATES):
                 #print(ret_func(s))
                 r_min = np.min(new_pi[raised][s][:])
-                new_pi[raised][s][:] += r_min
+                new_pi[raised][s][:] -= r_min
                 r_sum = np.sum(new_pi[raised][s][:])
                 if(r_sum != 0):
                     new_pi[raised][s][:] /= r_sum
