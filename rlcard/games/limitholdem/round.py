@@ -15,6 +15,7 @@ class LimitHoldemRound:
             num_players (int): The number of players
         """
         self.np_random = np_random
+        self.p1 = None
         self.game_pointer = None
         self.raise_amount = raise_amount
         self.allowed_raise_num = allowed_raise_num
@@ -43,6 +44,8 @@ class LimitHoldemRound:
         Note: For the first round of the game, we need to setup the big/small blind
         """
         self.game_pointer = game_pointer
+        self.p1 = game_pointer
+        self.p2_has_raised = False
         self.have_raised = 0
         self.not_raise_num = 0
         if raised:
@@ -76,6 +79,8 @@ class LimitHoldemRound:
             players[self.game_pointer].in_chips += diff
             self.have_raised += 1
             self.not_raise_num = 1
+            if self.game_pointer != self.p1:
+                self.p2_has_raised = True
 
         elif action == 'fold':
             players[self.game_pointer].status = 'folded'
@@ -102,7 +107,7 @@ class LimitHoldemRound:
         full_actions = ['call', 'raise', 'fold', 'check']
 
         # If the the number of raises already reaches the maximum number raises, we can not raise any more
-        if self.have_raised >= self.allowed_raise_num:
+        if self.have_raised >= self.allowed_raise_num or self.p2_has_raised:
             full_actions.remove('raise')
 
         # If the current chips are less than that of the highest one in the round, we can not check
