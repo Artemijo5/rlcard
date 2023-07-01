@@ -189,6 +189,7 @@ class PolicyIterator():
                             raised += 1
                         # Bellman Step
                         q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
+                        # TODO change the following - as is rn, only accounts for p1
                         if(a1 != 'fold'):
                             for next_state in range(len(self.P_next[s])):
                                 prob = self.P_next[s][next_state]
@@ -231,6 +232,7 @@ class PolicyIterator():
                         raised += 1
                     # Bellman Step
                     q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
+                    # TODO change the following - as is rn, only accounts for p1
                     if(a1 != 'fold'):
                         for next_state in range(len(self.P_next[s])):
                             prob = self.P_next[s][next_state]
@@ -661,11 +663,51 @@ class PolicyIterator():
                                 self.R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
   
 
-    def step(self, state):
-        print('WIP')
+    def determine_pid(self, positionInAssignment):
+        '''
+        args:
+        env: the environment (assumed to be a limitholdem environment)
+        positionInAssignment: the index at which our agent is put into in env.set_agents()
+        '''
+        player_array = self.env.game.players
+        for j in len(player_array):
+            if player_array[j].player_id == positionInAssignment:
+                return j
+        # j will be either 0 or 1
+        # our agent is p1 or p2, respectively
 
-    def eval_step(self, state):
-        print('WIP')
+    def step(self, pid, state):
+        s = self.get_state(pid)
+        legal_actions = state['raw_legal_actions']
+        raised = self.FIRST_ROUND
+        if s%4 != 0: # if in second round
+            raised += int(np.ceil(env.game.players[pid].in_chips)) # determine how many chips are raised
+
+        action_name = {'call', 'raise', 'fold', 'check'}
+        pol = self.policy[pid][raised][s]
+        if pid == 0: # p1 case
+            if 'check' in legal_actions: # before p2's turn - legal actions are raise, fold, check
+                for action in len(pol):
+                    if pol(action) == 0.55 or pol(action) == 1:
+                        return action_name[action]
+            else: # after p2 has raised - legal actions are call, fold
+                for action in len(pol):
+                    if pol(action) == 0.45 or pol(action) == 1:
+                        return action_name[action]
+        else: # p2 case
+            if 'check' in legal_actions: # p1 has checked - legal actions are raise, fold, check
+                for action in len(pol):
+                    if pol(action) == 0.55 or pol(action) == 1:
+                        return action_name[action]
+            else: # p1 has raised - legal actions are call, raise, fold
+                for action in len(pol):
+                    if pol(action) == 0.45 or pol(action) == 1:
+                        return action_name[action]
+        # the player cases could perhaps be fused into one, but this might be less confusing?
+
+
+    def eval_step(self, pid, state):
+        return self.step(pid, state)
     
     def save(self):
         print('WIP')
