@@ -670,6 +670,7 @@ class PolicyIterator():
         positionInAssignment: the index at which our agent is put into in env.set_agents()
         '''
         player_array = self.env.game.players
+        print(player_array)
         for j in len(player_array):
             if player_array[j].player_id == positionInAssignment:
                 return j
