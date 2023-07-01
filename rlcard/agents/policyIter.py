@@ -196,7 +196,7 @@ class PolicyIterator():
                                     # in each case, multiply by 1/3
                                     if a2 == 'raise':
                                         raised += 1
-                                        q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
+                                        q += (1/9)*gamma*prob*prev_V[next_state][raised+1]
                                         raised -= 1
                                     elif a2 == 'check' and a1 == 'check':
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
@@ -238,12 +238,12 @@ class PolicyIterator():
                                 # in each case, multiply by 1/3
                                 if a2 == 'raise':
                                     raised += 1
-                                    q += gamma*prob*V[next_state][raised+1]
+                                    q += (1/9)*gamma*prob*V[next_state][raised+1]
                                     raised -= 1
                                 elif a2 == 'check' and a1 == 'check':
-                                    q += gamma*prob*V[next_state][raised+1]
+                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
                                 elif a2 == 'call' and a1 == 'raise':
-                                    q += gamma*prob*V[next_state][raised+1]
+                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
                     Q[self.FIRST_ROUND][s][action_code[a1]] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
             else: # for second round
                 for raised in {0, 1, 2}: # for any number of tokens raised from round 1
