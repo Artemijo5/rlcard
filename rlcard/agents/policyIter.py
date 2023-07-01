@@ -303,7 +303,6 @@ class PolicyIterator():
             self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
-            print(t)
             self.Pplot[player_id,:,:,:,t] = self.policy[player_id][:][:][:]  #keep track of the policy evolution
             for j in range(4):
                 self.Vplot[player_id, j,:,t] = V[:,j]  # accounting for GUI
