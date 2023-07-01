@@ -258,13 +258,16 @@ class PolicyIterator():
                             # game lasts two rounds, so no next state
                             Q[raised+1][s][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
         ### TODO figure out how the following is supposed to work...
-        #for raised in range(4):
-        #    ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
-        #    for s in range(self.POSSIBLE_STATES):
-        #        print(ret_func(s))
-        #        for a in range(4):
-        #            new_pi[raised][s][a] = ret_func(s)[a]
-        new_pi = Q.copy()
+        for raised in range(4):
+            ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
+            for s in range(self.POSSIBLE_STATES):
+                #print(ret_func(s))
+                for a in range(4):
+                    if a == ret_func(s):
+                        new_pi[raised][s][a] = 1.0
+                    else:
+                        new_pi[raised][s][a] = 0.0
+        #new_pi = Q.copy()
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
