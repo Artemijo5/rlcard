@@ -290,7 +290,7 @@ class PolicyIterator():
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
                     for a in range(4):
-                        if abs(old_pi[raised][s][a] - self.policy[player_id][raised][s][a]) > 0.25:
+                        if abs(old_pi[raised][s][a] - self.policy[player_id][raised][s][a]) > 0.4:
                             unchanged = False 
             if unchanged or t >= 100:
                 break
