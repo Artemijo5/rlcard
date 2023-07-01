@@ -433,9 +433,15 @@ class PolicyIterator():
             # first, agent as player 1
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
                 state = self.get_state_Sim(hand1, None)
-                chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
-                chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
-                chanceOfCallingAfter = init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                chanceOfRaisingFirst = 0
+                if init_policy[0][0][state][action['call']] != 1:
+                    chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['check']])
+                chanceOfFoldingAfter = 0
+                chanceOfCallingAfter = 0
+                denom = init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']]
+                if denom != 0:
+                    chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / denom
+                    chanceOfCallingAfter = init_policy[0][0][state][action['call']] / denom
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: #adversary
                     for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                         for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
@@ -527,9 +533,15 @@ class PolicyIterator():
                                 win = self.compareHands(hand1, hand2, table) # 1 if p1 has better hand, -1 if p2 has better hand, 0 if same hand
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
-                                        self.chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['call']])
-                                        self.chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / (init_policy[0][t_index + 1][state][action['call']] + init_policy[0][t_index + 1][state][action['fold']])
-                                        self.chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / (init_policy[0][t_index + 1][state][action['call']] + init_policy[0][t_index + 1][state][action['fold']])
+                                        chanceOfRaisingFirst = 0
+                                        if init_policy[0][0][state][action['call']] != 1:
+                                            chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['check']])
+                                        chanceOfFoldingAfter = 0
+                                        chanceOfCallingAfter = 0
+                                        denom = init_policy[0][t_index + 1][state][action['call']] + init_policy[0][t_index + 1][state][action['fold']]
+                                        if denom != 0:
+                                            chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / denom
+                                            chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / denom
                                         if action1 == 'call':
                                             if action2 == 'raise':
                                                 # p1 can call only after p2 raised
