@@ -294,7 +294,12 @@ class PolicyIterator():
         t = 0
 
         while True:
-            old_pi = self.policy[player_id][:][:][:].copy() #keep the old policy to compare with new
+            old_pi = np.zeros(4, self.POSSIBLE_STATES, 4) #keep the old policy to compare with new
+            for raised in range(4):
+                for s in range(self.POSSIBLE_STATES):
+                    for a in range(4):
+                        old_pi[raised][s][a] = self.policy[player_id][raised][s][a]
+            
             self.fillInRewardTableRandom()
             V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
             self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
@@ -311,7 +316,7 @@ class PolicyIterator():
                     for a in range(4):
                         if (old_pi[raised][s][a] == self.policy[player_id][raised][s][a]):
                             unchanged = False 
-            if t == 2: # normally should be if unchanged
+            if unchanged: # normally should be if unchanged
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated[player_id] = True
