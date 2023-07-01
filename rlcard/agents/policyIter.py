@@ -665,16 +665,21 @@ class PolicyIterator():
 
     def determine_pid(self, positionInAssignment):
         '''
+        Call directly after env reset.
         args:
         env: the environment (assumed to be a limitholdem environment)
         positionInAssignment: the index at which our agent is put into in env.set_agents()
         '''
-        player_array = self.env.game.players
-        for j in range(len(player_array)):
-            if player_array[j].player_id == positionInAssignment:
-                return j
+        #player_array = self.env.game.players
+        #for j in range(len(player_array)):
+        #    if player_array[j].player_id == positionInAssignment:
+        #        return j
         # j will be either 0 or 1
         # our agent is p1 or p2, respectively
+        first_player = self.env.game.game_pointer
+        if pid == first_player:
+            return 0
+        return 1
 
     def step(self, pid, state):
         s = self.get_state(pid)
