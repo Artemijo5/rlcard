@@ -275,7 +275,7 @@ class PolicyIterator():
             for j in range(4):
                 self.Vplot[player_id, j,:,t] = V[:,j]  # accounting for GUI
 
-            unchanged == True
+            unchanged = True
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
                     for a in range(4):
