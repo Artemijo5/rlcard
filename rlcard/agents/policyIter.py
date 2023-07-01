@@ -402,8 +402,12 @@ class PolicyIterator():
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
                 state = self.get_state_Sim(hand1, None)
                 chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['call']])
-                chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
-                chanceOfCallingAfter = init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                if((init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']]) != 0):
+                    chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                    chanceOfCallingAfter = init_policy[0][0][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                else:
+                    chanceOfFoldingAfter = 0
+                    chanceOfCallingAfter = 0
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: #adversary
                     for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                         for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
@@ -496,8 +500,8 @@ class PolicyIterator():
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
                                         self.chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['call']])
-                                        self.chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
-                                        self.chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / (init_policy[0][0][state][action['call']] + init_policy[0][0][state][action['fold']])
+                                        self.chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / (init_policy[0][t_index + 1][state][action['call']] + init_policy[0][t_index + 1][state][action['fold']])
+                                        self.chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / (init_policy[0][t_index + 1][state][action['call']] + init_policy[0][t_index + 1][state][action['fold']])
                                         if action1 == 'call':
                                             if action2 == 'raise':
                                                 # p1 can call only after p2 raised
