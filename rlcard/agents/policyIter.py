@@ -688,20 +688,20 @@ class PolicyIterator():
         if pid == 0: # p1 case
             if 'check' in legal_actions: # before p2's turn - legal actions are raise, fold, check
                 for action in range(len(pol)):
-                    if pol(action) == 0.55 or pol(action) == 1:
+                    if pol[action] == 0.55 or pol[action] == 1:
                         return action_name[action]
             else: # after p2 has raised - legal actions are call, fold
                 for action in range(len(pol)):
-                    if pol(action) == 0.45 or pol(action) == 1:
+                    if pol[action] == 0.45 or pol[action] == 1:
                         return action_name[action]
         else: # p2 case
             if 'check' in legal_actions: # p1 has checked - legal actions are raise, fold, check
                 for action in range(len(pol)):
-                    if pol(action) == 0.55 or pol(action) == 1:
+                    if pol[action] == 0.55 or pol[action] == 1:
                         return action_name[action]
             else: # p1 has raised - legal actions are call, raise, fold
                 for action in range(len(pol)):
-                    if pol(action) == 0.45 or pol(action) == 1:
+                    if pol[action] == 0.45 or pol[action] == 1:
                         return action_name[action]
         # the player cases could perhaps be fused into one, but this might be less confusing?
 
