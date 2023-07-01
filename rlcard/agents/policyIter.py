@@ -192,7 +192,6 @@ class PolicyIterator():
                         if(a1 != 'fold'):
                             for next_state in range(len(self.P_next[s])):
                                 prob = self.P_next[s][next_state]
-                                '''
                                 for a2 in actions: # adversary's action
                                     # in each case, multiply by 1/3
                                     if a2 == 'raise':
@@ -203,8 +202,6 @@ class PolicyIterator():
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
                                     elif a2 == 'call' and a1 == 'raise':
                                         q += (1/3)*gamma*prob*prev_V[next_state][raised+1]
-                                '''
-                                q = q + gamma*prob*prev_V[next_state][raised+1]
                         V[s][self.FIRST_ROUND] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
                 else: # for second round
                     for raised in {0, 1, 2}: # for any number of tokens raised from round 1
@@ -237,7 +234,6 @@ class PolicyIterator():
                     if(a1 != 'fold'):
                         for next_state in range(len(self.P_next[s])):
                             prob = self.P_next[s][next_state]
-                            '''
                             for a2 in actions: # adversary's action
                                 # in each case, multiply by 1/3
                                 if a2 == 'raise':
@@ -248,8 +244,6 @@ class PolicyIterator():
                                     q += gamma*prob*V[next_state][raised+1]
                                 elif a2 == 'call' and a1 == 'raise':
                                     q += gamma*prob*V[next_state][raised+1]
-                            '''
-                            q = q + gamma*prob*V[next_state][raised+1]
                     Q[self.FIRST_ROUND][s][action_code[a1]] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
             else: # for second round
                 for raised in {0, 1, 2}: # for any number of tokens raised from round 1
