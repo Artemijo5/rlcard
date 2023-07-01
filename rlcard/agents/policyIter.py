@@ -238,12 +238,12 @@ class PolicyIterator():
                                 # in each case, multiply by 1/3
                                 if a2 == 'raise':
                                     raised += 1
-                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
+                                    q += gamma*prob*V[next_state][raised+1]
                                     raised -= 1
                                 elif a2 == 'check' and a1 == 'check':
-                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
+                                    q += gamma*prob*V[next_state][raised+1]
                                 elif a2 == 'call' and a1 == 'raise':
-                                    q += (1/3)*gamma*prob*V[next_state][raised+1]
+                                    q += gamma*prob*V[next_state][raised+1]
                     Q[self.FIRST_ROUND][s][action_code[a1]] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
             else: # for second round
                 for raised in {0, 1, 2}: # for any number of tokens raised from round 1
@@ -252,12 +252,13 @@ class PolicyIterator():
                             # game lasts two rounds, so no next state
                             Q[raised+1][s][action_code[a1]] += self.policy[player_id][raised+1][s][action_code[a1]]*q
         ### TODO figure out how the following is supposed to work...
-        for raised in range(4):
-            ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
-            for s in range(self.POSSIBLE_STATES):
-                print(ret_func(s))
-                for a in range(4):
-                    new_pi[raised][s][a] = ret_func(s)[a]
+        #for raised in range(4):
+        #    ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
+        #    for s in range(self.POSSIBLE_STATES):
+        #        print(ret_func(s))
+        #        for a in range(4):
+        #            new_pi[raised][s][a] = ret_func(s)[a]
+        new_pi = Q.copy()
         return new_pi
     
     def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
