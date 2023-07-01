@@ -294,7 +294,7 @@ class PolicyIterator():
         t = 0
 
         while True:
-            old_pi = np.zeros(4, self.POSSIBLE_STATES, 4) #keep the old policy to compare with new
+            old_pi = np.zeros((4, self.POSSIBLE_STATES, 4)) #keep the old policy to compare with new
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
                     for a in range(4):
