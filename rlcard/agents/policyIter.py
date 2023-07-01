@@ -251,15 +251,15 @@ class PolicyIterator():
         # TODO figure out how the following is supposed to work...
         # current attempt is to normalise the results...
         new_pi = Q.copy()
-        for raised in range(4):
-            #ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
-            for s in range(self.POSSIBLE_STATES):
-                #print(ret_func(s))
-                r_min = np.min(new_pi[raised][s][:])
-                new_pi[raised][s][:] -= r_min
-                r_sum = np.sum(new_pi[raised][s][:])
-                if(r_sum != 0):
-                    new_pi[raised][s][:] /= r_sum
+        #for raised in range(4):
+        #    #ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
+        #    for s in range(self.POSSIBLE_STATES):
+        #        #print(ret_func(s))
+        #        r_min = np.min(new_pi[raised][s][:])
+        #        new_pi[raised][s][:] -= r_min
+        #        r_sum = np.sum(new_pi[raised][s][:])
+        #        if(r_sum != 0):
+        #            new_pi[raised][s][:] /= r_sum
         # to make into deterministic policy:
         # if player 1, options are either: raise check fold, or call fold
         # if player 2, options are either: raise check fold, or raise call fold
