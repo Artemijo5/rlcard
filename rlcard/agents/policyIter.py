@@ -465,27 +465,28 @@ class PolicyIterator():
         # TODO figure out how the following is supposed to work...
         new_pi = Q.copy()
         # to make deterministic, when choosing an action during play, we pick the one with the highest policy prob
-        for raised in range(4):
-            for s in range(self.POSSIBLE_STATES):
-                pol = new_pi[raised][s]
-                if(not np.sum(pol[:]) == 0):
-                    # first, player1 case
-                    action1 = 0
-                    action2 = 0
-                    if player_id == self.P1:
-                        action1 = np.max([pol[1], pol[2], pol[3]])
-                        action2 = np.max([pol[0], pol[2]])
-                    else:
-                        action1 = np.max([pol[1], pol[2], pol[3]])
-                        action2 = np.max([pol[0], pol[1], pol[2]])
-                    for a in range(4):
-                        old = pol[a]
-                        pol[a] = 0
-                        if(old == action1):
-                            pol[a] += 0.55
-                        if(old == action2):
-                            pol[a] += 0.45
-                new_pi[raised][s] = pol[:]
+        for pid in [self.P1, self.P2]:
+            for raised in range(4):
+                for s in range(self.POSSIBLE_STATES):
+                    pol = new_pi[pid][raised][s]
+                    if(not np.sum(pol[:]) == 0):
+                        # first, player1 case
+                        action1 = 0
+                        action2 = 0
+                        if player_id == self.P1:
+                            action1 = np.max([pol[1], pol[2], pol[3]])
+                            action2 = np.max([pol[0], pol[2]])
+                        else:
+                            action1 = np.max([pol[1], pol[2], pol[3]])
+                            action2 = np.max([pol[0], pol[1], pol[2]])
+                        for a in range(4):
+                            old = pol[a]
+                            pol[a] = 0
+                            if(old == action1):
+                                pol[a] += 0.55
+                            if(old == action2):
+                                pol[a] += 0.45
+                    new_pi[pid][raised][s] = pol[:]
         return new_pi
     # TODO
     # the problem lies here
