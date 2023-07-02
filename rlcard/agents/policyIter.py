@@ -858,6 +858,7 @@ class PolicyIterator():
         
         # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
         # check that maybe (after the rest works though)
+        # one thing we could do is: normalise the results...
 
     def step(self, pid, state):
         s = self.get_state(pid)
