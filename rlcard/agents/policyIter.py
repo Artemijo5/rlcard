@@ -311,10 +311,11 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                 # game lasts two rounds, so no next state
                                 V[player_id][raised+1][s] += chance*q
-                if np.max(np.abs(V - prev_V)) < epsilon:
-                    break
-                prev_V = V.copy()
-                t += 1
+            if np.max(np.abs(V - prev_V)) < epsilon:
+                break
+            prev_V = V.copy()
+            t += 1
+            Vplot[:][:][:][t] = prev_V
             for j in range(4):
                 self.Vplot[player_id, j,:,t] = prev_V[:,j]  # accounting for GUI
         return V
@@ -328,52 +329,141 @@ class PolicyIterator():
         for player_id in [self.P1, self.P2]:
             for s in range(self.POSSIBLE_STATES):
                 if s%4 == 0: # for first round
-                    
-                    for a1 in actions:
-                        raised = 0
-                        if a1 == 'raise':
-                            raised += 1
-                        # Bellman Step
-                        q = self.R[player_id][self.FIRST_ROUND][s][action_code[a1]]
-                        # TODO change the following - as is rn, only accounts for p1
-                        if(a1 != 'fold'):
-                            for next_state in range(len(self.P_next[s])):
-                                prob = self.P_next[s][next_state]
-                                for a2 in actions: # adversary's action
-                                    # in each case, multiply by 1/3
-                                    if a2 == 'raise':
-                                        raised += 1
-                                        q += (1/9)*gamma*prob*V[next_state][raised+1]
-                                        raised -= 1
-                                    elif a2 == 'check' and a1 == 'check':
-                                        q += (1/3)*gamma*prob*V[next_state][raised+1]
-                                    elif a2 == 'call' and a1 == 'raise':
-                                        q += (1/3)*gamma*prob*V[next_state][raised+1]
-                        Q[player_id][self.FIRST_ROUND][s][action_code[a1]] += self.policy[player_id][self.FIRST_ROUND][s][action_code[a1]]*q
+                    # THERE NEED BE 2 CASES:
+                    # for P1
+                    # and for P2
+
+                    if player_id == self.P1: # player 1 case
+                            for a1 in actions: # agent
+                                ac = action_code[a1]
+                                raised = 0
+                                q = self.R[player_id][self.FIRST_ROUND][s][ac]
+                                a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
+
+                                chance = a_prob[ac] # probability this decision was taken, according to policy
+                                if(chance == 0.45 or chance == 0.55 or chance == 1): # after 1st iteration, policy is deterministic
+                                    chance = 1
+                                else:
+                                    if a1 == 'call':
+                                        chance = chance / (chance + a_prob[2])
+                                    elif a1 == 'raise' or a1 == 'check':
+                                        chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
+                                    elif a1 == 'fold':
+                                        chance = chance / (a_prob[1] + a_prob[2] + a_prob[3]) # prob it is before p2's turn
+                                        chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
+
+                                for next_state in range(len(self.P_next[s])):
+                                    prob = self.P_next[s]
+                                    if(a1 != 'fold' and a2 != 'fold' and prob != 0 and chance != 0):
+                                        for a2 in actions: # adversary
+                                            if a1 == 'raise':
+                                                raised += 1
+                                            if a2 == 'raise':
+                                                raised += 1
+                                            
+                                            if a1 == 'call':
+                                                if a2 == 'raise':
+                                                    q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+                                                    # 1/3 factor represents adversary's policy
+                                                    # 1-player_id because we are switching player positions in the next round
+                                            
+                                            if a1 == 'raise':
+                                                if a2 == 'call':
+                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                elif a2 == 'raise':
+                                                    q += chance*(1/3)*gamma*prob*V[1-player_id][raised+1][next_state]
+                                                # fold case is final and therefore ignored
+                                            
+                                            if a2 == 'check':
+                                                if a2 == 'check':
+                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                elif a2 == 'raise':
+                                                    q += chance*(1/3)*gamma*prob*V[1-player_id][raised+1][next_state]
+                                                # fold case is final and therefore ignored
+                                            
+                                            raised = 0 # at the end, reset raised
+
+                                Q[player_id][self.FIRST_ROUND][s][ac] += chance*q
+
+                    if player_id == self.P2:
+                            for a2 in actions: # agent
+                                ac = action_code[a2]
+                                raised = 0
+                                q = self.R[player_id][self.FIRST_ROUND][s][ac]
+                                a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
+
+                                chance = a_prob[ac] # probability this decision was taken, according to policy
+                                if(chance == 0.45 or chance == 0.55 or chance == 1): # after 1st iteration, policy is deterministic
+                                    chance = 1
+                                else:
+                                    if a2 == 'call':
+                                        chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
+                                    elif a2 == 'raise' or a2 == 'fold':
+                                        chance = chance / (0.5*a_prob[0] + a_prob[1] + a_prob[2] + 0.5*a_prob[3])
+                                    elif a2 == 'check':
+                                        chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
+
+                                for a1 in actions: # adversary
+
+                                    for next_state in range(len(self.P_next[s])):
+                                        prob = self.P_next[s]
+                                        if(a1 != 'fold' and a2 != 'fold' and prob != 0):
+                                            if a1 == 'raise':
+                                                raised += 1
+                                            if a2 == 'raise':
+                                                raised += 1
+                                            
+                                            if a1 == 'call':
+                                                if a2 == 'raise':
+                                                    q += chance*(1/2)*gamma*prob*V[1-player_id][raised+1][next_state]
+                                                
+                                            if a1 == 'raise':
+                                                if a2 == 'call':
+                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                if a2 == 'raise':
+                                                    q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+
+                                            if a1 == 'check':
+                                                if a2 == 'call':
+                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                if a2 == 'raise':
+                                                    q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+
+
+                                            raised = 0 # at the end, reset raised
+                                    
+                                Q[player_id][self.FIRST_ROUND][s][ac] += chance*q
+                   
                 else: # for second round
                     for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                             for a in actions:
                                 q = self.R[player_id][raised+1][s][action_code[a]]
+                                ac = action_code[a]
+                                a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
+
+                                chance = a_prob[ac]
+                                
+                                if(chance == 0.45 or chance == 0.55 or chance == 1): # deterministic
+                                    chance = 1
+                                elif player_id == self.P1:
+                                    if a == 'call':
+                                        chance = chance / (chance + a_prob[2])
+                                    elif a == 'raise' or a == 'check':
+                                        chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
+                                    elif a == 'fold':
+                                        chance = chance / (a_prob[1] + a_prob[2] + a_prob[3]) # prob it is before p2's turn
+                                        chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
+                                elif player_id == self.P2:
+                                    if a == 'call':
+                                        chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
+                                    elif a == 'raise' or a == 'fold':
+                                        chance = chance / (0.5*a_prob[0] + a_prob[1] + a_prob[2] + 0.5*a_prob[3])
+                                    elif a == 'check':
+                                        chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                 # game lasts two rounds, so no next state
-                                Q[player_id][raised+1][s][action_code[a]] += self.policy[player_id][raised+1][s][action_code[a]]*q
+                                Q[player_id][raised+1][s][ac] += chance*q
         # TODO figure out how the following is supposed to work...
-        # current attempt is to normalise the results...
         new_pi = Q.copy()
-        #for raised in range(4):
-        #    #ret_func = lambda s: {s:a for s, a in enumerate(np.argmax(Q[raised], axis=1))}[s]
-        #    for s in range(self.POSSIBLE_STATES):
-        #        #print(ret_func(s))
-        #        r_min = np.min(new_pi[raised][s][:])
-        #        new_pi[raised][s][:] -= r_min
-        #        r_sum = np.sum(new_pi[raised][s][:])
-        #        if(r_sum != 0):
-        #            new_pi[raised][s][:] /= r_sum
-        # to make into deterministic policy:
-        # if player 1, options are either: raise check fold, or call fold
-        # if player 2, options are either: raise check fold, or raise call fold
-        # in either case, make the most probable from the 1st set have 0.55 probability
-        # the most probable from the 2nd set has 0.45 probability
-        # others have 0 probability, according to policy
         # to make deterministic, when choosing an action during play, we pick the one with the highest policy prob
         for raised in range(4):
             for s in range(self.POSSIBLE_STATES):
@@ -403,21 +493,20 @@ class PolicyIterator():
     # but also, ensure each [s] of new_pi has 2 positions at most filled in
     # perhaps could be done by picking the action with highest immediate reward in case of multiplicity...
     
-    def policyIteration(self, player_id = 0, gamma = 1.0, epsilon = 1e-10):
+    def policyIteration(self, gamma = 1.0, epsilon = 1e-10):
         t = 0
 
         while True:
             old_pi = self.policy[player_id].copy()
             
             self.fillInRewardTableRandom()
-            V = self.policyEval(player_id, gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
-            self.policy[player_id] = self.policyImprovement(V, player_id, gamma)          #get a better policy using the value function of the previous one just calculated 
+            V = self.policyEval(gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
+            self.policy[player_id] = self.policyImprovement(V, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
             print(t)
-            self.Pplot[player_id,:,:,:,t] = self.policy[player_id][:][:][:]  #keep track of the policy evolution
-            for j in range(4):
-                self.Vplot[player_id, j,:,t] = V[:,j]  # accounting for GUI
+            self.Pplot = self.policy.copy()  #keep track of the policy evolution
+            self.Vplot = V.copy() # accounting for GUI
 
             unchanged = True
             for raised in range(4):
