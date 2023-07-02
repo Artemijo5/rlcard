@@ -497,7 +497,7 @@ class PolicyIterator():
         t = 0
 
         while True:
-            old_pi = self.policy[player_id].copy()
+            old_pi = self.policy.copy()
             
             self.fillInRewardTableRandom()
             V = self.policyEval(gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
@@ -509,11 +509,12 @@ class PolicyIterator():
             self.Vplot = V.copy() # accounting for GUI
 
             unchanged = True
-            for raised in range(4):
-                for s in range(self.POSSIBLE_STATES):
-                    for a in range(4):
-                        if (old_pi[raised][s][a] != self.policy[player_id][raised][s][a]):
-                            unchanged = False 
+            for player_id in [self.P1, self.P2]:
+                for raised in range(4):
+                    for s in range(self.POSSIBLE_STATES):
+                        for a in range(4):
+                            if (old_pi[player_id][raised][s][a] != self.policy[player_id][raised][s][a]):
+                                unchanged = False 
             if unchanged: # normally should be if unchanged
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
