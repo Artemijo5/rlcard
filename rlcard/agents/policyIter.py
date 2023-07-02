@@ -853,6 +853,9 @@ class PolicyIterator():
                                 self.R[pid][raised+1][s][a] = 0.0
                             else:
                                 self.R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
+        
+        # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
+        # check that maybe (after the rest works though)
 
     def step(self, pid, state):
         s = self.get_state(pid)
