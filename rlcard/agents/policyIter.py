@@ -501,7 +501,7 @@ class PolicyIterator():
             
             self.fillInRewardTableRandom()
             V = self.policyEval(gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
-            self.policy[player_id] = self.policyImprovement(V, gamma)          #get a better policy using the value function of the previous one just calculated 
+            self.policy = self.policyImprovement(V, gamma)          #get a better policy using the value function of the previous one just calculated 
             
             t += 1
             print(t)
