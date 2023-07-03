@@ -191,8 +191,8 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
-                                if(chance == 0.45 or chance == 0.55 or chance == 1): # after 1st iteration, policy is deterministic
-                                    chance = 1
+                                if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
+                                    chance = 1*(chance != 0)
                                 else:
                                     if a1 == 'call':
                                         chance = chance / (chance + a_prob[2])
@@ -243,8 +243,8 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
-                                if(chance == 0.45 or chance == 0.55 or chance == 1): # after 1st iteration, policy is deterministic
-                                    chance = 1
+                                if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
+                                    chance = 1*(chance != 0)
                                 else:
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
@@ -339,8 +339,8 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
-                                if(chance == 0.45 or chance == 0.55 or chance == 1): # after 1st iteration, policy is deterministic
-                                    chance = 1
+                                if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
+                                    chance = 1*(chance != 0)
                                 else:
                                     if a1 == 'call':
                                         chance = chance / (chance + a_prob[2])
@@ -391,8 +391,8 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
-                                if(chance == 0.45 or chance == 0.55 or chance == 1): # after 1st iteration, policy is deterministic
-                                    chance = 1
+                                if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
+                                    chance = 1*(chance != 0)
                                 else:
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
