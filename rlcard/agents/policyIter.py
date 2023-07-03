@@ -650,13 +650,13 @@ class PolicyIterator():
             Exhaustively simulate every possible game state with current policy, to fill in table of rewards.
             '''
             # For player 1, round 1:
-            Pn1 = np.zeros((20, 4), dtype = np.int8) # times s-a has been encountered
+            Pn1 = np.zeros((20, 4), dtype = np.float64) # times s-a has been encountered
             Pr1 = np.zeros((20, 4), dtype = np.float64) # reward amassed from enounters of s-a
             # For player 2, round 1:
-            Pn2 = np.zeros((20, 4), dtype = np.int8) # times s-a has been encountered
+            Pn2 = np.zeros((20, 4), dtype = np.float64) # times s-a has been encountered
             Pr2 = np.zeros((20, 4), dtype = np.float64) # reward amassed from enounters of s-a
             # For both players, round 2, tracking how much has been raised:
-            Pn = np.zeros((2, 3, 20, 4), dtype = np.int8) # times s-a has been encountered
+            Pn = np.zeros((2, 3, 20, 4), dtype = np.float64) # times s-a has been encountered
             Pr = np.zeros((2, 3, 20, 4), dtype = np.float64) # average reward from enounters of s-a
 
             # First, 2 loops to cover all the first round scenarios:
@@ -893,6 +893,7 @@ class PolicyIterator():
                                 self.R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
 
             # NORMALISE THE REWARDS TABLE:
+            '''
             for pid in range(2):
                 for raised in {1, 2, 3}: # not needed for 1st round it is presumed
                     norm = [0, 0, 0, 0]
@@ -909,6 +910,7 @@ class PolicyIterator():
                         for a in range(4):
                             if loc[a] > cap and loc[a] != 0:
                                 self.R[pid][raised][s][a] = norm[a]*np.sign(self.R[pid][raised][s][a])
+            '''
                         
         # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
         # check that maybe (after the rest works though)
