@@ -296,7 +296,7 @@ class PolicyIterator():
                         for raised in {0, 1, 2}: # for any number of tokens raised from round 1
                             for a in actions:
                                 q = self.R[player_id][raised+1][s][action_code[a]]
-                                a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
+                                a_prob = self.policy[player_id][raised+1][s][:] # keep track of policy
 
                                 chance = a_prob[action_code[a]]
                                 
@@ -324,7 +324,6 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                 # game lasts two rounds, so no next state
                                 V[player_id][raised+1][s] += chance*q
-                                print('reward %d and chance %d', q, chance)
             if np.max(np.abs(V - prev_V)) < epsilon:
                 break
             prev_V = V.copy()
@@ -459,7 +458,7 @@ class PolicyIterator():
                             for a in actions:
                                 q = self.R[player_id][raised+1][s][action_code[a]]
                                 ac = action_code[a]
-                                a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
+                                a_prob = self.policy[player_id][raised+1][s][:] # keep track of policy
 
                                 chance = a_prob[ac]
                                 
