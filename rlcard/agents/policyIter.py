@@ -197,7 +197,7 @@ class PolicyIterator():
                                     chance = 1*(chance != 0)
                                 else:
                                 '''
-                                if True:
+                                if chance != 0 :
                                     if a1 == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a1 == 'raise' or a1 == 'check':
@@ -253,7 +253,7 @@ class PolicyIterator():
                                     chance = 1*(chance != 0)
                                 else:
                                 '''
-                                if True:
+                                if chance != 0:
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a2 == 'raise' or a2 == 'fold':
@@ -305,7 +305,9 @@ class PolicyIterator():
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
                                 '''
-                                if player_id == self.P1:
+                                if chance == 0:
+                                    chance = chance
+                                elif player_id == self.P1:
                                     if a == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a == 'raise' or a == 'check':
@@ -356,7 +358,7 @@ class PolicyIterator():
                                     chance = 1*(chance != 0)
                                 else:
                                 '''
-                                if True:
+                                if chance != 0:
                                     if a1 == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a1 == 'raise' or a1 == 'check':
@@ -412,7 +414,7 @@ class PolicyIterator():
                                     chance = 1*(chance != 0)
                                 else:
                                 '''
-                                if True:
+                                if chance != 0:
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a2 == 'raise' or a2 == 'fold':
@@ -465,7 +467,9 @@ class PolicyIterator():
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
                                 '''
-                                if player_id == self.P1:
+                                if chance == 0:
+                                    chance = chance
+                                elif player_id == self.P1:
                                     if a == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a == 'raise' or a == 'check':
