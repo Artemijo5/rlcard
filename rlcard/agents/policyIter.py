@@ -908,7 +908,7 @@ class PolicyIterator():
                         loc = np.abs(self.R[pid][raised][s][:])
                         for a in range(4):
                             if loc[a] > cap and loc[a] != 0:
-                                self.R[pid][raised][s][a] = norm[a]*np.sgn(self.R[pid][raised][s][a])
+                                self.R[pid][raised][s][a] = norm[a]*np.sign(self.R[pid][raised][s][a])
                         
         # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
         # check that maybe (after the rest works though)
