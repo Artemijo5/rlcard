@@ -974,7 +974,7 @@ class PolicyIterator():
         for j in range(len(w)):
             a = legal_actions[j]
             ac = action_code[a]
-            w[j] = pol[ac] / denom
+            w[j] = pol[ac] / weight_denom
 
         return np.random.choice(legal_actions, p = w)
 
