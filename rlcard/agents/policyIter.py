@@ -203,7 +203,7 @@ class PolicyIterator():
                                         chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
 
                                 for next_state in range(len(self.P_next[s])):
-                                    prob = self.P_next[s]
+                                    prob = self.P_next[s][next_state]
                                     if(a1 != 'fold' and prob != 0 and chance != 0):
                                         for a2 in actions: # adversary
                                             if a1 == 'raise':
@@ -256,7 +256,7 @@ class PolicyIterator():
                                 for a1 in actions: # adversary
 
                                     for next_state in range(len(self.P_next[s])):
-                                        prob = self.P_next[s]
+                                        prob = self.P_next[s][next_state]
                                         if(a1 != 'fold' and a2 != 'fold' and prob != 0):
                                             if a1 == 'raise':
                                                 raised += 1
@@ -353,7 +353,7 @@ class PolicyIterator():
                                         chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
 
                                 for next_state in range(len(self.P_next[s])):
-                                    prob = self.P_next[s]
+                                    prob = self.P_next[s][next_state]
                                     if(a1 != 'fold' and prob != 0 and chance != 0):
                                         for a2 in actions: # adversary
                                             if a1 == 'raise':
@@ -406,7 +406,7 @@ class PolicyIterator():
                                 for a1 in actions: # adversary
 
                                     for next_state in range(len(self.P_next[s])):
-                                        prob = self.P_next[s]
+                                        prob = self.P_next[s][next_state]
                                         if(a1 != 'fold' and a2 != 'fold' and prob != 0):
                                             if a1 == 'raise':
                                                 raised += 1
