@@ -906,7 +906,9 @@ class PolicyIterator():
                     # then normalise by dividing
                     for s in range(20):
                         fold_local = np.abs(self.R[pid][raised][s][2])
-                        rat = 0 if fold_local = 0 else fold_norm / fold_local
+                        rat = 0
+                        if fold_local != 0:
+                            rat = fold_norm / fold_local
                         self.R[pid][raised][s][:] *= rat
                         
         # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
