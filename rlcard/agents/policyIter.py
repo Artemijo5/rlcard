@@ -667,7 +667,7 @@ class PolicyIterator():
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
                 state = self.get_state_Sim(hand1, None)
                 chanceOfRaisingFirst = 0
-                if init_policy[0][0][state][action['call']] != 1:
+                if init_policy[0][0][state][action['check']] != 1:
                     chanceOfRaisingFirst = init_policy[0][0][state][action['raise']] / (1 - init_policy[0][0][state][action['check']])
                 chanceOfFoldingAfter = 0
                 chanceOfCallingAfter = 0
@@ -767,7 +767,7 @@ class PolicyIterator():
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # agent
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
                                         chanceOfRaisingFirst = 0
-                                        if init_policy[0][0][state][action['call']] != 1:
+                                        if init_policy[0][0][state][action['check']] != 1:
                                             chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['check']])
                                         chanceOfFoldingAfter = 0
                                         chanceOfCallingAfter = 0
