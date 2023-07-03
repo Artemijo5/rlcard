@@ -550,7 +550,7 @@ class PolicyIterator():
                 for raised in range(4):
                     for s in range(self.POSSIBLE_STATES):
                         for a in range(4):
-                            if (old_pi[player_id][raised][s][a] != self.policy[player_id][raised][s][a]):
+                            if (old_pi[player_id][raised][s][a] - self.policy[player_id][raised][s][a]) > epsilon:
                                 unchanged = False 
             if unchanged or t >= max_iter:
                 break
