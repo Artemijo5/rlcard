@@ -315,7 +315,7 @@ class PolicyIterator():
                 break
             prev_V = V.copy()
             t += 1
-            self.Vplot[:][:][:][t] = prev_V.copy() # accounting for GUI
+            #self.Vplot[:][:][:][t] = prev_V.copy() # accounting for GUI
         return V
 
     def policyImprovement(self, V, gamma = 1.0):
