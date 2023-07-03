@@ -549,9 +549,13 @@ class PolicyIterator():
             for player_id in [self.P1, self.P2]:
                 for raised in range(4):
                     for s in range(self.POSSIBLE_STATES):
+                        # see if their relative order has remained the same...
+                        old_order = np.argsort(old_pi[player_id][raised][s][:])
+                        new_order = np.zeros(self.policy[player_id][raised][s][:])
                         for a in range(4):
-                            if (old_pi[player_id][raised][s][a] - self.policy[player_id][raised][s][a]) > epsilon:
-                                unchanged = False 
+                            if old_order[a] != new_order[a]:
+                                unchanged = False
+                                break
             if unchanged or t >= max_iter:
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
