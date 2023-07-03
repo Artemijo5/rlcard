@@ -553,12 +553,13 @@ class PolicyIterator():
                         old_order = np.argsort(old_pi[player_id][raised][s][:])
                         new_order = np.argsort(self.policy[player_id][raised][s][:])
 
-                        print(old_order)
-                        print(new_order)
-                        print()
-                        
+                        #print(old_order)
+                        #print(new_order)
+                        #print()
+
                         for a in range(4):
                             if old_order[a] != new_order[a]:
+                                print("\nIndexes : %d %d %d %d \n", player_id, raised, s, a)
                                 unchanged = False
                                 break
                         else:
