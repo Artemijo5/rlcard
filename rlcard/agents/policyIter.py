@@ -571,7 +571,7 @@ class PolicyIterator():
                         # first, player1 case
                         action1 = 0
                         action2 = 0
-                        if player_id == self.P1:
+                        if pid == self.P1:
                             action1 = np.max([pol[1], pol[2], pol[3]])
                             action2 = np.max([pol[0], pol[2]])
                         else:
