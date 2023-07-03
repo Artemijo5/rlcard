@@ -495,7 +495,8 @@ class PolicyIterator():
                     minr = np.min(new_pi[pid][raised][s][:])
                     new_pi[pid][raised][s][:] -= minr
                     sumr = np.sum(new_pi[pid][raised][s][:])
-                    new_pi[pid][raised][s][:] /= sumr
+                    if sumr != 0:
+                        new_pi[pid][raised][s][:] /= sumr
 
         # to make deterministic, when choosing an action during play, we pick the one with the highest policy prob
         '''
