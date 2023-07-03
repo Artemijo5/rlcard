@@ -324,7 +324,7 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                 # game lasts two rounds, so no next state
                                 V[player_id][raised+1][s] += chance*q
-                                print(V[player_id][raised+1][s])
+                                print('reward %d and chance %d', q, chance)
             if np.max(np.abs(V - prev_V)) < epsilon:
                 break
             prev_V = V.copy()
