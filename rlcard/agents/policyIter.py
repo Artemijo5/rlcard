@@ -561,6 +561,15 @@ class PolicyIterator():
                             if old_order[a] != new_order[a]:
                                 unchanged = False
                                 break
+                        else:
+                            continue
+                        break
+                    else:
+                        continue
+                    break
+                else:
+                    continue
+                break
             if unchanged or t >= max_iter:
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
