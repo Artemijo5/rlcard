@@ -781,7 +781,7 @@ class PolicyIterator():
                                                 # there is a chance p1 had raised before
                                                 # win or lose 1 raised token, + a second raised token times that chance
                                                 Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
-                                                Pr[0][t_index][state][action[action1]] += (tokens_in + 1)*win*chanceOfRaisingFirst
+                                                Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfRaisingFirst)*win
                                         elif action1 == 'raise':
                                             if(action2 == 'raise'):
                                                 # there is a chance we fold afterwards and lose the raised token
