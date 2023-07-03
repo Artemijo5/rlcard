@@ -895,21 +895,20 @@ class PolicyIterator():
             # NORMALISE THE REWARDS TABLE:
             for pid in range(2):
                 for raised in {1, 2, 3}: # not needed for 1st round it is presumed
-                    fold_norm = 0
+                    norm = [0, 0, 0, 0]
+                    cap = (raised + 0.5) if raised > self.FIRST_ROUND else (raised + 1.5)
                     # first find what to normalise by
-                    # all folding should yield the same results on the same subtable
                     for s in range(20):
-                        fold_local = np.abs(self.R[pid][raised][s][2])
-                        fold_cap = (raised + 0.5) if raised > self.FIRST_ROUND else (raised + 1.5)
-                        if fold_local > fold_norm and fold_local <= fold_cap:
-                            fold_norm = fold_local
+                        loc = np.abs(self.R[pid][raised][s][:])
+                        for a in range(4):
+                            if loc[a] > norm[a] and loc[a] <= cap:
+                                norm[a] = loc[a]
                     # then normalise by dividing
                     for s in range(20):
-                        fold_local = np.abs(self.R[pid][raised][s][2])
-                        rat = 0
-                        if fold_local != 0:
-                            rat = fold_norm / fold_local
-                        self.R[pid][raised][s][:] *= rat
+                        loc = np.abs(self.R[pid][raised][s][:])
+                        for a in range(4):
+                            if loc[a] > cap:
+                                self.R[pid][raised][s][:] = norm[a]
                         
         # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
         # check that maybe (after the rest works though)
