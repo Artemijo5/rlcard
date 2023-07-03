@@ -552,7 +552,7 @@ class PolicyIterator():
                         for a in range(4):
                             if (old_pi[player_id][raised][s][a] != self.policy[player_id][raised][s][a]):
                                 unchanged = False 
-            if unchanged or t >= 10: # normally should be if unchanged
+            if unchanged or t >= 2: # normally should be if unchanged
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated[player_id] = True
