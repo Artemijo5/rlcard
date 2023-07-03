@@ -936,6 +936,7 @@ class PolicyIterator():
             raised += int(np.ceil(self.env.game.players[pid].in_chips)) # determine how many chips are raised
 
         action_name = ['call', 'raise', 'fold', 'check']
+        print(pid)
         pol = self.policy[pid][raised][s]
         if pid == 0: # p1 case
             if 'check' in legal_actions: # before p2's turn - legal actions are raise, fold, check
