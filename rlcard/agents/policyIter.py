@@ -533,7 +533,10 @@ class PolicyIterator():
     def policyIteration(self, max_iter, gamma = 1.0, epsilon = 1e-10):
         t = 0
 
+        old_pi = np.zeros((2, 4, self.POSSIBLE_STATES, 4))
+        older_pi = np.zeros((2, 4, self.POSSIBLE_STATES, 4))
         while True:
+            older_pi = old_pi.copy()
             old_pi = self.policy.copy()
             
             self.fillInRewardTableRandom()
@@ -550,7 +553,7 @@ class PolicyIterator():
                 for raised in range(4):
                     for s in range(self.POSSIBLE_STATES):
                         # see if their relative order has remained the same...
-                        old_order = np.argsort(old_pi[player_id][raised][s][:])
+                        old_order = np.argsort(older_pi[player_id][raised][s][:])
                         new_order = np.argsort(self.policy[player_id][raised][s][:])
 
                         #print(old_order)
