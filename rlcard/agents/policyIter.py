@@ -504,8 +504,8 @@ class PolicyIterator():
             
             t += 1
             print(t)
-            self.Pplot = self.policy.copy()  #keep track of the policy evolution
-            self.Vplot = V.copy() # accounting for GUI
+            #self.Pplot = self.policy.copy()  #keep track of the policy evolution
+            #self.Vplot = V.copy() # accounting for GUI
 
             unchanged = True
             for player_id in [self.P1, self.P2]:
