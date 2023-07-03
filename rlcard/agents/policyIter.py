@@ -191,9 +191,13 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
+                                # below code is if making it deterministic...
+                                '''
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
                                 else:
+                                '''
+                                if True:
                                     if a1 == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a1 == 'raise' or a1 == 'check':
@@ -243,9 +247,13 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
+                                # below code is if making it deterministic...
+                                '''
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
                                 else:
+                                '''
+                                if True:
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a2 == 'raise' or a2 == 'fold':
@@ -292,9 +300,12 @@ class PolicyIterator():
 
                                 chance = a_prob[action_code[a]]
                                 
+                                # below code is if making it deterministic...
+                                '''
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
-                                elif player_id == self.P1:
+                                '''
+                                if player_id == self.P1:
                                     if a == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a == 'raise' or a == 'check':
@@ -339,9 +350,13 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
+                                # below code is if making it deterministic...
+                                '''
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
                                 else:
+                                '''
+                                if True:
                                     if a1 == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a1 == 'raise' or a1 == 'check':
@@ -391,9 +406,13 @@ class PolicyIterator():
                                 a_prob = self.policy[player_id][self.FIRST_ROUND][s][:] # keep track of policy
 
                                 chance = a_prob[ac] # probability this decision was taken, according to policy
+                                # below code is if making it deterministic...
+                                '''
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
                                 else:
+                                '''
+                                if True:
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a2 == 'raise' or a2 == 'fold':
@@ -441,9 +460,12 @@ class PolicyIterator():
 
                                 chance = a_prob[ac]
                                 
+                                # below code is if making it deterministic...
+                                '''
                                 if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
                                     chance = 1*(chance != 0)
-                                elif player_id == self.P1:
+                                '''
+                                if player_id == self.P1:
                                     if a == 'call':
                                         chance = chance / (chance + a_prob[2])
                                     elif a == 'raise' or a == 'check':
@@ -463,6 +485,7 @@ class PolicyIterator():
         # TODO figure out how the following is supposed to work...
         new_pi = Q.copy()
         # to make deterministic, when choosing an action during play, we pick the one with the highest policy prob
+        '''
         for pid in [self.P1, self.P2]:
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
@@ -485,6 +508,7 @@ class PolicyIterator():
                             if(old == action2):
                                 pol[a] += 0.45
                     new_pi[pid][raised][s] = pol[:]
+        '''
         return new_pi
     # TODO
     # the problem lies here
@@ -514,7 +538,7 @@ class PolicyIterator():
                         for a in range(4):
                             if (old_pi[player_id][raised][s][a] != self.policy[player_id][raised][s][a]):
                                 unchanged = False 
-            if unchanged: # normally should be if unchanged
+            if unchanged or t>= 10: # normally should be if unchanged
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated[player_id] = True
