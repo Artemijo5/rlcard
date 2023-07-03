@@ -488,6 +488,15 @@ class PolicyIterator():
                                 Q[player_id][raised+1][s][ac] += chance*q
         # TODO figure out how the following is supposed to work...
         new_pi = Q.copy()
+        # normalise:
+        for pid in [self.P1, self.P2]:
+            for raised in range(4):
+                for s in range(self.POSSIBLE_STATES):
+                    minr = np.min(new_pi[pid][raised][s][:])
+                    new_pi[pid][raised][s][:] -= minr
+                    sumr = np.sum(new_pi[pid][raised][s][:])
+                    new_pi[pid][raised][s][:] /= sumr
+
         # to make deterministic, when choosing an action during play, we pick the one with the highest policy prob
         '''
         for pid in [self.P1, self.P2]:
