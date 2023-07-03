@@ -559,7 +559,7 @@ class PolicyIterator():
 
                         for a in range(4):
                             if old_order[a] != new_order[a]:
-                                print("\nIndexes : %d %d %d %d \n", player_id, raised, s, a)
+                                #print("\nIndexes : %d %d %d %d \n", player_id, raised, s, a)
                                 unchanged = False
                                 break
                         else:
