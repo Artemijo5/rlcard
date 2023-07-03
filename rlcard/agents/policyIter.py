@@ -934,11 +934,10 @@ class PolicyIterator():
         raised = self.FIRST_ROUND
         if s%4 != 0: # if in second round
             raised += int(np.ceil(self.env.game.players[pid].in_chips)) # determine how many chips are raised
+        if(raised>3):
+            raised = 3
 
         action_name = ['call', 'raise', 'fold', 'check']
-        print(pid)
-        print(raised)
-        print(s)
         pol = self.policy[pid][raised][s]
         if pid == 0: # p1 case
             if 'check' in legal_actions: # before p2's turn - legal actions are raise, fold, check
@@ -966,7 +965,9 @@ class PolicyIterator():
         raised = self.FIRST_ROUND
         if s%4 != 0: # if in second round
             raised += int(np.ceil(self.env.game.players[pid].in_chips)) # determine how many chips are raised
-
+        if(raised>3):
+            raised = 3
+            
         action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
         pol = self.policy[pid][raised][s]
         
