@@ -937,6 +937,8 @@ class PolicyIterator():
 
         action_name = ['call', 'raise', 'fold', 'check']
         print(pid)
+        print(raised)
+        print(s)
         pol = self.policy[pid][raised][s]
         if pid == 0: # p1 case
             if 'check' in legal_actions: # before p2's turn - legal actions are raise, fold, check
