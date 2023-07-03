@@ -530,7 +530,7 @@ class PolicyIterator():
     # but also, ensure each [s] of new_pi has 2 positions at most filled in
     # perhaps could be done by picking the action with highest immediate reward in case of multiplicity...
     
-    def policyIteration(self, gamma = 1.0, epsilon = 1e-10):
+    def policyIteration(self, max_iter, gamma = 1.0, epsilon = 1e-10):
         t = 0
 
         while True:
@@ -552,7 +552,7 @@ class PolicyIterator():
                         for a in range(4):
                             if (old_pi[player_id][raised][s][a] != self.policy[player_id][raised][s][a]):
                                 unchanged = False 
-            if unchanged or t >= 2: # normally should be if unchanged
+            if unchanged or t >= max_iter:
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
         self.evaluated[player_id] = True
