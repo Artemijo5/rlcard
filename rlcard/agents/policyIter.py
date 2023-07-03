@@ -10,7 +10,8 @@ class PolicyIterator():
         self.use_raw = False
         self.env = env
 
-        self.evaluated = [False, False] # for players 1 and 2
+        self.evaluated = False # for players 1 and 2
+        self.deterministic = False # for whether policy is deterministic or not
         self.num_actions = 4 # self.env.num_actions
 
         # state encoding:
@@ -552,7 +553,7 @@ class PolicyIterator():
             if unchanged or t >= max_iter:
                 break
         print('converged after %d iterations' %t) #keep track of the number of (outer) iterations to converge
-        self.evaluated[player_id] = True
+        self.evaluated = True
         return V, self.policy
     
     def deriveDeterministicPolicy(self):
@@ -584,6 +585,7 @@ class PolicyIterator():
                             if(old == action2):
                                 pol[a] += 0.45
                     self.policy[pid][raised][s] = pol[:]
+        self.deterministic = True
     
     def valueIteration(self, gamma = 1.0, epsilon = 1e-10):
         print('WIP')
@@ -919,31 +921,14 @@ class PolicyIterator():
                             else:
                                 self.R[pid][raised+1][s][a] = Pr[pid][raised][s][a] / np.abs(Pn[pid][raised][s][a])
 
-            # NORMALISE THE REWARDS TABLE:
-            '''
-            for pid in range(2):
-                for raised in {1, 2, 3}: # not needed for 1st round it is presumed
-                    norm = [0, 0, 0, 0]
-                    cap = (raised + 0.5) if raised > self.FIRST_ROUND else (raised + 1.5)
-                    # first find what to normalise by
-                    for s in range(20):
-                        loc = np.abs(self.R[pid][raised][s][:])
-                        for a in range(4):
-                            if loc[a] > norm[a] and loc[a] <= cap:
-                                norm[a] = loc[a]
-                    # then normalise by dividing
-                    for s in range(20):
-                        loc = np.abs(self.R[pid][raised][s][:])
-                        for a in range(4):
-                            if loc[a] > cap and loc[a] != 0:
-                                self.R[pid][raised][s][a] = norm[a]*np.sign(self.R[pid][raised][s][a])
-            '''
-                        
-        # TODO there is certainly sth wrong with the logic causing different & impossible token rewards
-        # check that maybe (after the rest works though)
-        # one thing we could do is: normalise the results...
 
     def step(self, pid, state):
+        if self.deterministic:
+            return self.step_deterministic(pid, state)
+        else:
+            return self.step_nd(pid, state)
+
+    def step_deterministic(self, pid, state):
         s = self.get_state(pid)
         legal_actions = state['raw_legal_actions']
         raised = self.FIRST_ROUND
@@ -972,8 +957,28 @@ class PolicyIterator():
                         return action_name[action]
         # the player cases could perhaps be fused into one, but this might be less confusing?
 
-        # TODO CHANGE PID IF P2 RAISES IN FIRST ROUND
-        # TODO THIS ALSO NEEDS TO BE REFLECTED IN THE POLICY
+    def step_nd(self, pid, state):
+        s = self.get_state(pid)
+        legal_actions = state['raw_legal_actions']
+        raised = self.FIRST_ROUND
+        if s%4 != 0: # if in second round
+            raised += int(np.ceil(self.env.game.players[pid].in_chips)) # determine how many chips are raised
+
+        action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
+        pol = self.policy[pid][raised][s]
+        
+        weight_denom = 0
+        for a in legal_actions:
+            weight_denom += pol[action_code[a]]
+        w = np.zeros(len(legal_actions))
+        for j in range(len(w)):
+            a = legal_actions[j]
+            ac = action_code[a]
+            w[j] = pol[ac] / denom
+
+        return np.random.choice(legal_actions, p = w)
+
+
 
     def eval_step(self, pid, state):
         return self.step(pid, state)
