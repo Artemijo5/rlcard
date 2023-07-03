@@ -204,7 +204,7 @@ class PolicyIterator():
 
                                 for next_state in range(len(self.P_next[s])):
                                     prob = self.P_next[s]
-                                    if(a1 != 'fold' and a2 != 'fold' and prob != 0 and chance != 0):
+                                    if(a1 != 'fold' and prob != 0 and chance != 0):
                                         for a2 in actions: # adversary
                                             if a1 == 'raise':
                                                 raised += 1
@@ -354,7 +354,7 @@ class PolicyIterator():
 
                                 for next_state in range(len(self.P_next[s])):
                                     prob = self.P_next[s]
-                                    if(a1 != 'fold' and a2 != 'fold' and prob != 0 and chance != 0):
+                                    if(a1 != 'fold' and prob != 0 and chance != 0):
                                         for a2 in actions: # adversary
                                             if a1 == 'raise':
                                                 raised += 1
