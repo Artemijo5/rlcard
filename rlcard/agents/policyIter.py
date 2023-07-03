@@ -292,8 +292,8 @@ class PolicyIterator():
 
                                 chance = a_prob[action_code[a]]
                                 
-                                if(chance == 0.45 or chance == 0.55 or chance == 1): # deterministic
-                                    chance = 1
+                                if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
+                                    chance = 1*(chance != 0)
                                 elif player_id == self.P1:
                                     if a == 'call':
                                         chance = chance / (chance + a_prob[2])
@@ -441,8 +441,8 @@ class PolicyIterator():
 
                                 chance = a_prob[ac]
                                 
-                                if(chance == 0.45 or chance == 0.55 or chance == 1): # deterministic
-                                    chance = 1
+                                if(chance in {0, 0.45, 0.55, 1}): # after 1st iteration, policy is deterministic
+                                    chance = 1*(chance != 0)
                                 elif player_id == self.P1:
                                     if a == 'call':
                                         chance = chance / (chance + a_prob[2])
