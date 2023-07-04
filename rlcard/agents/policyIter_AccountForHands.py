@@ -722,7 +722,6 @@ class PolicyIterator():
         card_states = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
 
         
-        rlcard/envs/policyIter.py
         if(len(table)==0):
             quant = self.FIRST_ROUND
         else:
