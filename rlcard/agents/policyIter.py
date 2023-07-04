@@ -119,7 +119,7 @@ class PolicyIterator():
             12: { # First J
                 0 : 0.0, # First A
                 1 : 0.24, # High A
-                2 : 0.32, # Double A
+                2 : 0.04, # Double A
                 3 : 0.0, # Triple A
                 4 : 0.0, # First K
                 5 : 0.16, # High K
