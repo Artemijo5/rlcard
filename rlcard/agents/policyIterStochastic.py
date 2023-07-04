@@ -211,19 +211,25 @@ class PolicyIterator():
                                 for next_state in range(len(self.P_next[s])):
                                     prob = self.P_next[s][next_state]
                                     if(a1 != 'fold' and prob != 0 and chance != 0):
-                                        for a2 in actions: # adversary
+                                        for c2 in {'A', 'K', 'Q', 'J', 'T'}: # for agent 2's card
+                                            s2 = self.get_state_Sim(c2, None)
+
+                                            a2 = None # adversary
                                             if a1 == 'raise':
                                                 raised += 1
-                                            if a2 == 'raise':
-                                                raised += 1
+                                            
                                             
                                             if a1 == 'call':
-                                                if a2 == 'raise':
+                                                    if c2 
                                                     q += chance*(1/3)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
                                                     # 1/3 factor represents adversary's policy
                                                     # 1-player_id because we are switching player positions in the next round
                                             
                                             if a1 == 'raise':
+                                                a2 = self.getAdversaryAction_Sim(s2, ['call', 'raise', 'fold'])
+                                                if a2 == 'raise':
+                                                    raised += 1
+
                                                 if a2 == 'call':
                                                     q += chance*(1/3)*gamma*prob*prev_V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
@@ -231,6 +237,10 @@ class PolicyIterator():
                                                 # fold case is final and therefore ignored
                                             
                                             if a2 == 'check':
+                                                a2 = self.getAdversaryAction_Sim(s2, ['raise', 'fold', 'check'])
+                                                if a2 == 'raise':
+                                                    raised += 1
+
                                                 if a2 == 'check':
                                                     q += chance*(1/3)*gamma*prob*prev_V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
@@ -263,19 +273,15 @@ class PolicyIterator():
                                     elif a2 == 'check':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
 
-                                for a1 in actions: # adversary
+                                for c1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                                    s1 = self.get_state_Sim(c1, None)
+                                    a1 = self.getAdversaryAction_Sim(s1, ['raise', 'fold', 'check'])
 
                                     for next_state in range(len(self.P_next[s])):
                                         prob = self.P_next[s][next_state]
                                         if(a1 != 'fold' and a2 != 'fold' and prob != 0):
-                                            if a1 == 'raise':
-                                                raised += 1
                                             if a2 == 'raise':
                                                 raised += 1
-                                            
-                                            if a1 == 'call':
-                                                if a2 == 'raise':
-                                                    q += chance*(1/2)*gamma*prob*prev_V[1-player_id][raised+1][next_state]
                                                 
                                             if a1 == 'raise':
                                                 if a2 == 'call':
@@ -372,19 +378,25 @@ class PolicyIterator():
                                 for next_state in range(len(self.P_next[s])):
                                     prob = self.P_next[s][next_state]
                                     if(a1 != 'fold' and prob != 0 and chance != 0):
-                                        for a2 in actions: # adversary
+                                        for c2 in {'A', 'K', 'Q', 'J', 'T'}: # for agent 2's card
+                                            s2 = self.get_state_Sim(c2, None)
+
+                                            a2 = None # adversary
                                             if a1 == 'raise':
                                                 raised += 1
-                                            if a2 == 'raise':
-                                                raised += 1
+                                            
                                             
                                             if a1 == 'call':
-                                                if a2 == 'raise':
+                                                    if c2 
                                                     q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
                                                     # 1/3 factor represents adversary's policy
                                                     # 1-player_id because we are switching player positions in the next round
                                             
                                             if a1 == 'raise':
+                                                a2 = self.getAdversaryAction_Sim(s2, ['call', 'raise', 'fold'])
+                                                if a2 == 'raise':
+                                                    raised += 1
+
                                                 if a2 == 'call':
                                                     q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
@@ -392,6 +404,10 @@ class PolicyIterator():
                                                 # fold case is final and therefore ignored
                                             
                                             if a2 == 'check':
+                                                a2 = self.getAdversaryAction_Sim(s2, ['raise', 'fold', 'check'])
+                                                if a2 == 'raise':
+                                                    raised += 1
+
                                                 if a2 == 'check':
                                                     q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
@@ -399,6 +415,7 @@ class PolicyIterator():
                                                 # fold case is final and therefore ignored
                                             
                                             raised = 0 # at the end, reset raised
+
 
                                 Q[player_id][self.FIRST_ROUND][s][ac] += chance*q
 
@@ -424,19 +441,15 @@ class PolicyIterator():
                                     elif a2 == 'check':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
 
-                                for a1 in actions: # adversary
+                                for c1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                                    s1 = self.get_state_Sim(c1, None)
+                                    a1 = self.getAdversaryAction_Sim(s1, ['raise', 'fold', 'check'])
 
                                     for next_state in range(len(self.P_next[s])):
                                         prob = self.P_next[s][next_state]
                                         if(a1 != 'fold' and a2 != 'fold' and prob != 0):
-                                            if a1 == 'raise':
-                                                raised += 1
                                             if a2 == 'raise':
                                                 raised += 1
-                                            
-                                            if a1 == 'call':
-                                                if a2 == 'raise':
-                                                    q += chance*(1/2)*gamma*prob*V[1-player_id][raised+1][next_state]
                                                 
                                             if a1 == 'raise':
                                                 if a2 == 'call':
@@ -830,12 +843,12 @@ class PolicyIterator():
                                             chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / denom
                                             chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / denom
                                         if action1 == 'call':
-                                                action2 = 'raise'
-                                                # p1 can call only after p2 raised
-                                                # there is a chance p1 had raised before
-                                                # win or lose 1 raised token, + a second raised token times that chance
-                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
-                                                Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfFoldingFirst)*win
+                                                if(state2%4 == self.TRIPLE or state2 in {4*self.A_s + self.DOUBLE, 4*self.K_s + self.DOUBLE}):
+                                                    # p1 can call only after p2 raised
+                                                    # there is a chance p1 had raised before
+                                                    # win or lose 1 raised token, + a second raised token times that chance
+                                                    Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
+                                                    Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfFoldingFirst)*win
                                         elif action1 == 'raise':
                                             action2 = self.getAdversaryAction_Sim(state1, ['call', 'raise', 'fold'])
                                             if(action2 == 'raise'):
@@ -903,12 +916,13 @@ class PolicyIterator():
                                             Pr[1][t_index][state][action[action2]] += tokens_in
                                         elif action1 == 'check':
                                             # chance that p1 folds after checking is ~46.667%
-                                            chanceP1Fold = 0.466666666667
-                                            chanceP1Call = 1 - chanceP1Fold
                                             if(action2 == 'raise'):
+                                                action1 = self.getAdversaryAction_Sim(state1, ['call', 'fold'])
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += chanceP1Fold*(tokens_in)
-                                                Pr[1][t_index][state][action[action2]] += chanceP1Call*(tokens_in+1)*win
+                                                if action1 == 'fold':
+                                                    Pr[1][t_index][state][action[action2]] += tokens_in
+                                                else: # call
+                                                    Pr[1][t_index][state][action[action2]] += (tokens_in+1)*win
                                             elif(action2 == 'fold'): # immediate loss of the initial token
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
                                                 Pr[1][t_index][state][action[action2]] -= tokens_in
