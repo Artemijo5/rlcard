@@ -577,13 +577,17 @@ class PolicyIterator():
                         else:
                             action1 = np.max([pol[1], pol[2], pol[3]])
                             action2 = np.max([pol[0], pol[1], pol[2]])
+                        have_given_primary = False
+                        have_given_secondary = False
                         for a in range(4):
                             old = pol[a]
                             pol[a] = 0
-                            if(old == action1):
+                            if(old == action1 and not have_given_primary):
                                 pol[a] += 0.55
-                            if(old == action2):
+                                have_given_primary = True
+                            if(old == action2 and not have_given_secondary):
                                 pol[a] += 0.45
+                                have_given_secondary = True
                     self.policy[pid][raised][s] = pol[:]
         self.deterministic = True
     
