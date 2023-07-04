@@ -601,19 +601,17 @@ class PolicyIterator():
 
         card_states = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
 
+        card = card_states[hand]
         if(len(table)==0):
             quant = self.FIRST_ROUND
-            card = card_states[hand]
         else:
             if(table[0]==hand or table[1]==hand):
-                card = card_states[hand]
                 if table[0] == table[1]:
                     quant = self.TRIPLE
                 else:
                     quant = self.DOUBLE
             else:
                 quant = self.HIGH_CARD
-                card = hand
             '''
             elif(table[0] == table[1]):
                 card = card_states[table[0]]
