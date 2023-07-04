@@ -220,8 +220,9 @@ class PolicyIterator():
                                             
                                             
                                             if a1 == 'call':
-                                                    if c2 
-                                                    q += chance*(1/3)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
+                                                    if c2 in {'A', 'K'}:
+                                                        q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+                                                        q += chance*(1/3)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
                                                     # 1/3 factor represents adversary's policy
                                                     # 1-player_id because we are switching player positions in the next round
                                             
@@ -387,8 +388,8 @@ class PolicyIterator():
                                             
                                             
                                             if a1 == 'call':
-                                                    if c2 
-                                                    q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+                                                    if c2 in {'A', 'K'}:
+                                                        q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
                                                     # 1/3 factor represents adversary's policy
                                                     # 1-player_id because we are switching player positions in the next round
                                             
