@@ -52,111 +52,111 @@ class PolicyIterator():
         self.P_next = {
             0: { # First A
                 0 : 0.0, # First A
-                1 : 0.48, # High A
+                1 : 0.64, # High A
                 2 : 0.32, # Double A
                 3 : 0.04, # Triple A
                 4 : 0.0, # First K
                 5 : 0.0, # High K
-                6 : 0.04, # Double K
+                6 : 0.0, # Double K
                 7 : 0.0, # Triple K
                 8 : 0.0, # First Q
                 9 : 0.0, # High Q
-                10: 0.04, # Double Q
+                10: 0.0, # Double Q
                 11: 0.0, # Triple Q
                 12: 0.0, # First J
                 13: 0.0, # High J
-                14: 0.04, # Double J
+                14: 0.0, # Double J
                 15: 0.0, # Triple J
                 16: 0.0, # First T
                 17: 0.0, # High T
-                18: 0.04, # Double T
+                18: 0.0, # Double T
                 19: 0.0 #Triple T
             },
             4: { # First K
                 0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
                 3 : 0.0, # Triple A
                 4 : 0.0, # First K
-                5 : 0.24, # High K
+                5 : 0.64, # High K
                 6 : 0.32, # Double K
                 7 : 0.04, # Triple K
                 8 : 0.0, # First Q
                 9 : 0.0, # High Q
-                10: 0.04, # Double Q
+                10: 0.0, # Double Q
                 11: 0.0, # Triple Q
                 12: 0.0, # First J
                 13: 0.0, # High J
-                14: 0.04, # Double J
+                14: 0.0, # Double J
                 15: 0.0, # Triple J
                 16: 0.0, # First T
                 17: 0.0, # High T
-                18: 0.04, # Double T
+                18: 0.0, # Double T
                 19: 0.0 #Triple T
             },
             8: { # First Q
                 0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
                 3 : 0.0, # Triple A
                 4 : 0.0, # First K
-                5 : 0.16, # High K
-                6 : 0.04, # Double K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
                 7 : 0.0, # Triple K
                 8 : 0.0, # First Q
-                9 : 0.08, # High Q
+                9 : 0.64, # High Q
                 10: 0.32, # Double Q
                 11: 0.04, # Triple Q
                 12: 0.0, # First J
                 13: 0.0, # High J
-                14: 0.04, # Double J
+                14: 0.0, # Double J
                 15: 0.0, # Triple J
                 16: 0.0, # First T
                 17: 0.0, # High T
-                18: 0.04, # Double T
+                18: 0.0, # Double T
                 19: 0.0 #Triple T
             },
             12: { # First J
                 0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
                 3 : 0.0, # Triple A
                 4 : 0.0, # First K
-                5 : 0.16, # High K
-                6 : 0.04, # Double K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
                 7 : 0.0, # Triple K
                 8 : 0.0, # First Q
-                9 : 0.08, # High Q
-                10: 0.04, # Double Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
                 11: 0.0, # Triple Q
                 12: 0.0, # First J
-                13: 0.0, # High J
+                13: 0.64, # High J
                 14: 0.32, # Double J
                 15: 0.04, # Triple J
                 16: 0.0, # First T
                 17: 0.0, # High T
-                18: 0.04, # Double T
+                18: 0.00, # Double T
                 19: 0.0 #Triple T
             },
             16: { # First T
                 0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
+                1 : 0.0, # High A
+                2 : 0.0, # Double A
                 3 : 0.0, # Triple A
                 4 : 0.0, # First K
-                5 : 0.16, # High K
-                6 : 0.04, # Double K
+                5 : 0.0, # High K
+                6 : 0.0, # Double K
                 7 : 0.0, # Triple K
                 8 : 0.0, # First Q
-                9 : 0.08, # High Q
-                10: 0.04, # Double Q
+                9 : 0.0, # High Q
+                10: 0.0, # Double Q
                 11: 0.0, # Triple Q
                 12: 0.0, # First J
                 13: 0.0, # High J
-                14: 0.04, # Double J
+                14: 0.0, # Double J
                 15: 0.0, # Triple J
                 16: 0.0, # First T
-                17: 0.0, # High T
+                17: 0.64, # High T
                 18: 0.32, # Double T
                 19: 0.04 #Triple T
             }
