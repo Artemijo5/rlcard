@@ -646,10 +646,12 @@ class PolicyIterator():
             else:
                 return 'check'
         else:
-            if s%4 in {self.DOUBLE, self.TRIPLE}:
+            if s%4 == self.TRIPLE or s in {4*self.A_s+self.DOUBLE, 4*self.K_s+self.DOUBLE}:
                 return 'raise'
-            else:
+            elif s%4 in self.DOUBLE:
                 return 'call'
+            else:
+                return 'check'
     
     def getAdversaryAction_Sim(self, s, legal_actions):
         # made to match our implementation of the stochastic adversary in limitholdem_rule_models.py
@@ -736,6 +738,8 @@ class PolicyIterator():
             tokens_in = 0.5 # ante
             # wrt first round, only fold really matters
 
+            cards = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
+
             # first, agent as player 1
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # agent
                 state = self.get_state_Sim(hand1, None)
@@ -749,47 +753,35 @@ class PolicyIterator():
                     chanceOfFoldingAfter = init_policy[0][0][state][action['fold']] / denom
                     chanceOfCallingAfter = init_policy[0][0][state][action['call']] / denom
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: #adversary
+                    state2 = self.get_state_Sim(hand2, None)
                     for action1 in {'call', 'raise', 'fold', 'check'}: # agent
-                        for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
-                            if(action1 == 'call' and action2 == 'raise'): # action1 can only be call after 2 was raise
-                                Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                        if action1 == 'raise':
+                            action2 = self.getAdversaryAction_Sim(state2, ['call', 'raise', 'fold'])
+                            # no immediate reward or loss, but adding this case for formality:
+                            if action2 == 'fold':
+                                Pn2[state][action[action1]] = 1 + Pn2[state][action[action1]]
+                                Pr2[state][action[action1]] += tokens_in
+                        elif action1 == 'check':
+                            action2 = self.getAdversaryAction_Sim(state2, ['raise', 'fold', 'check'])
+                            # no immediate reward or loss, but adding this case for formality:
+                            if action2 == 'fold':
+                                Pn2[state][action[action1]] = 1 + Pn2[state][action[action1]]
+                                Pr2[state][action[action1]] += tokens_in
+                        elif action1 == 'call':
+                            action2 = 'raise'
                             # no immediate reward or loss
-                            elif(action1 == 'raise'):
-                                # if player 2 folds, immediate reward
-                                # if player 2 raises, chance of folding afterwards -> loss of raised tokens
-                                # if player 2 calls, no immediate reward or loss
-                                if(action2 == 'fold'):
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
-                                    Pr1[state][action[action1]] += tokens_in
-                                elif(action2 == 'raise'):
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
-                                    Pr1[state][action[action1]] -= (tokens_in + 1)*chanceOfFoldingAfter
-                            elif(action1 == 'fold'):
-                                if(action2 == 'raise'):
-                                    # there is a chance we fold before raise, or after
-                                    # if after, there is a chance we had raised or checked earlier
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
-                                    Pr1[state][action[action1]] -= tokens_in + chanceOfRaisingFirst*1
-                                else:
-                                    # loss is tokens_in
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
-                                    Pr1[state][action[action1]] -= tokens_in
-                            else: # action1 == 'check'
-                                if(action2 == 'raise'):
-                                    # there is a chance we fold afterwards and lose the initial token
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
-                                    Pr1[state][action[action1]] -= (tokens_in)*chanceOfFoldingAfter
-                                elif(action2 == 'fold'): # immediate reward of the initial token
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
-                                    Pr1[state][action[action1]] += tokens_in
-                                elif(action2 == 'check'): # cannot be call
-                                    Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                        else:
+                            # immediate loss for folding
+                            action2 = None
+                            Pn2[state][action[action1]] = 1 + Pn2[state][action[action1]]
+                            Pr2[state][action[action1]] -= tokens_in
 
             # secondly, agent as player 2
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                state1 = self.get_state_Sim(hand1, None)
+                action1 = self.getAdversaryAction_Sim(state1, ['raise', 'fold', 'check'])
                 for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # agent
-                    state = self.get_state_Sim(hand2, None)
-                    for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
+                        state = self.get_state_Sim(hand2, None)
                         for action2 in {'call', 'raise', 'fold', 'check'}: # agent
                             # ignore case where p1 calls - no reward or loss from there
                             if action1 == 'raise':
@@ -797,33 +789,22 @@ class PolicyIterator():
                                     # no immediate reward or loss
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
                                 elif action2 == 'raise':
-                                    # 50% chance that p1 folds afterwards
+                                    # 0% chance that p1 folds afterwards, no gains
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
-                                    Pr2[state][action[action2]] += 0.5*(tokens_in + 1)
                                 elif action2 == 'fold':
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
                                     Pr2[state][action[action2]] -= tokens_in
-                            elif action1 == 'fold':
-                                if action2 == 'raise':
-                                    # 50% chance the fold is done after the raise
-                                    # in which case, 50% chance there was already a raise before
-                                    # the other 50% chance is that the fold is done before the raise
-                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
-                                    Pr2[state][action[action2]] += tokens_in + 0.25
-                                else:
-                                    Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
-                                    Pr2[state][action[action2]] += tokens_in
                             elif action1 == 'check':
                                 if action2 == 'check':
                                     # no immediate reward or loss
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
                                 elif action2 == 'raise':
-                                    # 50% chance p1 will fold afterwards
+                                    # 0% chance p1 will fold afterwards, no gain
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
-                                    Pr2[state][action[action2]] += 0.5*(tokens_in)
                                 elif action2 == 'fold':
                                     Pn2[state][action[action2]] = 1 + Pn2[state][action[action2]]
                                     Pr2[state][action[action2]] -= tokens_in
+                            # Stochastic agent does not fold in round 1
 
             # now for round 2
 
@@ -836,9 +817,9 @@ class PolicyIterator():
                             table = [table1, table2]
                             state = self.get_state_Sim(hand1, table)
                             for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # adversary
+                                state2 = self.get_state_Sim(hand2, table)
                                 win = self.compareHands(hand1, hand2, table) # 1 if p1 has better hand, -1 if p2 has better hand, 0 if same hand
                                 for action1 in {'call', 'raise', 'fold', 'check'}: # agent
-                                    for action2 in {'call', 'raise', 'fold', 'check'}: # adversary
                                         chanceOfRaisingFirst = 0
                                         if init_policy[0][0][state][action['check']] != 1:
                                             chanceOfRaisingFirst = init_policy[0][0][t_index + 1][action['raise']] / (1 - init_policy[0][0][state][action['check']])
@@ -849,13 +830,14 @@ class PolicyIterator():
                                             chanceOfFoldingAfter = init_policy[0][t_index + 1][state][action['fold']] / denom
                                             chanceOfCallingAfter = init_policy[0][t_index + 1][state][action['call']] / denom
                                         if action1 == 'call':
-                                            if action2 == 'raise':
+                                                action2 = 'raise'
                                                 # p1 can call only after p2 raised
                                                 # there is a chance p1 had raised before
                                                 # win or lose 1 raised token, + a second raised token times that chance
                                                 Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
-                                                Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfRaisingFirst)*win
+                                                Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfFoldingFirst)*win
                                         elif action1 == 'raise':
+                                            action2 = self.getAdversaryAction_Sim(state1, ['call', 'raise', 'fold'])
                                             if(action2 == 'raise'):
                                                 # there is a chance we fold afterwards and lose the raised token
                                                 # or we call, and win or lose the doubly raised token
@@ -869,14 +851,14 @@ class PolicyIterator():
                                                 Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
                                                 Pr[0][t_index][state][action[action1]] += (tokens_in+1)*win
                                         elif action1 == 'fold':
-                                            if action2 == 'raise':
-                                                # chance we had raised before
+                                                # take folding both before and after into account:
+                                                # chance that p2 raises: triple or double A/K, 16.8%
+                                                p2Raise = 0.168
                                                 Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
-                                                Pr[0][t_index][state][action[action1]] -= tokens_in + chanceOfRaisingFirst*1
-                                            else:
-                                                Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
-                                                Pr[0][t_index][state][action[action1]] -= tokens_in
+                                                Pr[0][t_index][state][action[action1]] -= (tokens_in + chanceOfRaisingFirst*1)*p2Raise
+                                                Pr[0][t_index][state][action[action1]] -= tokens_in*(1-p2Raise)
                                         elif action1 == 'check':
+                                            action2 = self.getAdversaryAction_Sim(state1, ['raise', 'fold', 'check'])
                                             if(action2 == 'raise'):
                                                 # there is a chance we fold afterwards and lose the initial token
                                                 # or we call, and win or lose the raised token
@@ -897,25 +879,17 @@ class PolicyIterator():
                     for table1 in {'A', 'K', 'Q', 'J', 'T'}:
                         for table2  in {'A', 'K', 'Q', 'J', 'T'}:
                             table = [table1, table2]
+                            state1 = self.get_state_Sim(hand1, None)
+                            action1 = self.getAdversaryAction_Sim(state1, ['raise', 'fold', 'check'])
                             for hand2  in {'A', 'K', 'Q', 'J', 'T'}: # agent
-                                state = self.get_state_Sim(hand2, table)
-                                win = self.compareHands(hand2, hand1, table) # 1 if p2 has better hand, -1 if p1 has better hand, 0 if same hand
-                                for action1 in {'call', 'raise', 'fold', 'check'}: # adversary
+                                    state = self.get_state_Sim(hand2, table)
+                                    win = self.compareHands(hand2, hand1, table) # 1 if p2 has better hand, -1 if p1 has better hand, 0 if same hand
                                     for action2 in {'call', 'raise', 'fold', 'check'}: # agent
-                                        if action1 == 'call':
-                                            if action2 == 'raise':
-                                                # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
-                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += (tokens_in + 0.5)*win
-                                        elif action1 == 'raise':
+                                        if action1 == 'raise':
                                             if(action2 == 'raise'):
-                                                # there is a 50% chance p1 will later call, 50% chance they will fold
-                                                # there is a 50% chance p1 had checked or raised earlier - 0.5 raised token on avg
-                                                # if call, see above case
-                                                # if fold, p2 immediately wins 0.5 raised token
+                                                # adversary will surely call afterwards
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 0.5)*win
-                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)*win
+                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 2)*win
                                             elif(action2 == 'fold'): # immediate loss of the initial token
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
                                                 Pr[1][t_index][state][action[action2]] -= tokens_in
@@ -924,19 +898,17 @@ class PolicyIterator():
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
                                                 Pr[1][t_index][state][action[action2]] += (tokens_in + 1)*win
                                         elif action1 == 'fold':
-                                            if action2 == 'raise':
-                                                # 50% chance p1 had raised before
-                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += tokens_in + 0.25
-                                            else:
-                                                Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += tokens_in
+                                            # 0% chance p1 had raised before
+                                            Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
+                                            Pr[1][t_index][state][action[action2]] += tokens_in
                                         elif action1 == 'check':
+                                            # chance that p1 folds after checking is ~46.667%
+                                            chanceP1Fold = 0.466666666667
+                                            chanceP1Call = 1 - chanceP1Fold
                                             if(action2 == 'raise'):
-                                                # 50% chance p1 will fold, 50% chance p1 will call
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)
-                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in+1)*win
+                                                Pr[1][t_index][state][action[action2]] += chanceP1Fold*(tokens_in)
+                                                Pr[1][t_index][state][action[action2]] += chanceP1Call*(tokens_in+1)*win
                                             elif(action2 == 'fold'): # immediate loss of the initial token
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
                                                 Pr[1][t_index][state][action[action2]] -= tokens_in

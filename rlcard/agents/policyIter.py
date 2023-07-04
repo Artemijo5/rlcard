@@ -995,7 +995,7 @@ class PolicyIterator():
                                                 # if call, see above case
                                                 # if fold, p2 immediately wins 0.5 raised token
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
-                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 0.5)*win
+                                                Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in + 2)*win
                                                 Pr[1][t_index][state][action[action2]] += 0.5*(tokens_in)*win
                                             elif(action2 == 'fold'): # immediate loss of the initial token
                                                 Pn[1][t_index][state][action[action2]] = 1 + Pn[1][t_index][state][action[action2]]
