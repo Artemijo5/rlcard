@@ -49,7 +49,6 @@ class PolicyIterator():
         # State Transition Probability Table
         # only needed for first round states - second round states are guaranteed final
         # gamma will need to be less than one, to account for the possibility of game ending at round 1
-        '''
         # This is the one to account for hand cards in the state array.
         self.P_next = {
             0: { # First A
@@ -277,6 +276,7 @@ class PolicyIterator():
                 19: 0.04 #Triple T
             }
         }
+        '''
 
         # PLOTTING
         self.size = self.POSSIBLE_STATES
@@ -723,28 +723,15 @@ class PolicyIterator():
 
         
         if(len(table)==0):
-            card = card_states[hand]
             quant = self.FIRST_ROUND
         else:
             if(table[0]==hand or table[1]==hand):
-                card = card_states[hand]
                 if table[0] == table[1]:
                     quant = self.TRIPLE
                 else:
                     quant = self.DOUBLE
-            elif(table[0] == table[1]):
-                card = card_states[table[0]]
-                quant = self.DOUBLE
-            else: # if all 3 cards are different, J and T are excluded, only A, K, Q matter
+            else:
                 quant = self.HIGH_CARD
-                if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
-                    card = card_states['A']
-                elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
-                    card = card_states['K']
-                else:
-                    card = card_states['Q']
-            #else:
-            #    quant = self.HIGH_CARD
         
         return 4*card + quant
 
@@ -761,17 +748,8 @@ class PolicyIterator():
                     return 4*cards[hand] + quant['T']
                 else:
                     return 4*cards[hand] + quant['D']
-            elif(table[0]==table[1]):
-                return 4*cards[table[0]] + quant['D']
             else:
-                if(hand == 'A' or table[0] == 'A' or table[1] == 'A'):
-                    return 4*cards['A'] + quant['H']
-                elif(hand == 'K' or table[0] == 'K' or table[1] == 'K'):
-                    return 4*cards['K'] + quant['H']
-                else:
-                    return 4*cards['Q'] + quant['H']
-            #else:
-            #    return 4*cards[hand] + quant['H']
+                return 4*cards[hand] + quant['H']
     
     def compareHands(self, hand1, hand2, table):
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
