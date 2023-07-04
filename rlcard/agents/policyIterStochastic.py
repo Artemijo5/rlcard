@@ -162,121 +162,6 @@ class PolicyIterator():
                 19: 0.04 #Triple T
             }
         }
-        '''
-        # does not account for hand cards
-        self.P_next = {
-            0: { # First A
-                0 : 0.0, # First A
-                1 : 0.48, # High A
-                2 : 0.32, # Double A
-                3 : 0.04, # Triple A
-                4 : 0.0, # First K
-                5 : 0.0, # High K
-                6 : 0.04, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.0, # First Q
-                9 : 0.0, # High Q
-                10: 0.04, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.0, # First J
-                13: 0.0, # High J
-                14: 0.04, # Double J
-                15: 0.0, # Triple J
-                16: 0.0, # First T
-                17: 0.0, # High T
-                18: 0.04, # Double T
-                19: 0.0 #Triple T
-            },
-            4: { # First K
-                0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.0, # First K
-                5 : 0.24, # High K
-                6 : 0.32, # Double K
-                7 : 0.04, # Triple K
-                8 : 0.0, # First Q
-                9 : 0.0, # High Q
-                10: 0.04, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.0, # First J
-                13: 0.0, # High J
-                14: 0.04, # Double J
-                15: 0.0, # Triple J
-                16: 0.0, # First T
-                17: 0.0, # High T
-                18: 0.04, # Double T
-                19: 0.0 #Triple T
-            },
-            8: { # First Q
-                0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.0, # First K
-                5 : 0.16, # High K
-                6 : 0.04, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.0, # First Q
-                9 : 0.08, # High Q
-                10: 0.32, # Double Q
-                11: 0.04, # Triple Q
-                12: 0.0, # First J
-                13: 0.0, # High J
-                14: 0.04, # Double J
-                15: 0.0, # Triple J
-                16: 0.0, # First T
-                17: 0.0, # High T
-                18: 0.04, # Double T
-                19: 0.0 #Triple T
-            },
-            12: { # First J
-                0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.0, # First K
-                5 : 0.16, # High K
-                6 : 0.04, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.0, # First Q
-                9 : 0.08, # High Q
-                10: 0.04, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.0, # First J
-                13: 0.0, # High J
-                14: 0.32, # Double J
-                15: 0.04, # Triple J
-                16: 0.0, # First T
-                17: 0.0, # High T
-                18: 0.04, # Double T
-                19: 0.0 #Triple T
-            },
-            16: { # First T
-                0 : 0.0, # First A
-                1 : 0.24, # High A
-                2 : 0.04, # Double A
-                3 : 0.0, # Triple A
-                4 : 0.0, # First K
-                5 : 0.16, # High K
-                6 : 0.04, # Double K
-                7 : 0.0, # Triple K
-                8 : 0.0, # First Q
-                9 : 0.08, # High Q
-                10: 0.04, # Double Q
-                11: 0.0, # Triple Q
-                12: 0.0, # First J
-                13: 0.0, # High J
-                14: 0.04, # Double J
-                15: 0.0, # Triple J
-                16: 0.0, # First T
-                17: 0.0, # High T
-                18: 0.32, # Double T
-                19: 0.04 #Triple T
-            }
-        }
-        '''
 
         # PLOTTING
         self.size = self.POSSIBLE_STATES
@@ -750,6 +635,62 @@ class PolicyIterator():
                     return 4*cards[hand] + quant['D']
             else:
                 return 4*cards[hand] + quant['H']
+
+    def getAdversaryAction_base(self, s):
+        # made to match our implementation of the stochastic adversary in limitholdem_rule_models.py
+        action_code = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
+        
+        if s%4 == self.FIRST_ROUND:
+            if s == 4*self.A_s or s == 4*self.K_s:
+                return 'raise'
+            else:
+                return 'check'
+        else:
+            if s%4 in {self.DOUBLE, self.TRIPLE}:
+                return 'raise'
+            else:
+                return 'call'
+    
+    def getAdversaryAction_Sim(self, s, legal_actions):
+        # made to match our implementation of the stochastic adversary in limitholdem_rule_models.py
+        action = getAdversaryAction_base(s)
+        if action in legal_actions:
+            return action
+        else:
+            if action == 'raise':
+                return 'call'
+            if action == 'check':
+                if len(public_cards) == 0:
+                    return 'call'
+                else:
+                    return 'fold'
+            if action == 'call':
+                return 'check'
+            else:
+                return action
+    
+    def getAdversaryAction(self, s):
+        # made to match our implementation of the stochastic adversary in limitholdem_rule_models.py
+        action = getAdversaryAction_base(s)
+
+        state = self.env.get_state(player_id)
+        legal_actions = state['raw_legal_actions']
+
+        if action in legal_actions:
+            return action
+        else:
+            if action == 'raise':
+                return 'call'
+            if action == 'check':
+                if len(public_cards) == 0:
+                    return 'call'
+                else:
+                    return 'fold'
+            if action == 'call':
+                return 'check'
+            else:
+                return action
+
     
     def compareHands(self, hand1, hand2, table):
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
