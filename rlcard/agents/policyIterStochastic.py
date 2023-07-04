@@ -206,7 +206,7 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                     elif a1 == 'fold':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3]) # prob it is before p2's turn
-                                        chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
+                                        chance += (1-chance)*0.08* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
 
                                 for next_state in range(len(self.P_next[s])):
                                     prob = self.P_next[s][next_state]
@@ -221,9 +221,9 @@ class PolicyIterator():
                                             
                                             if a1 == 'call':
                                                     if c2 in {'A', 'K'}:
-                                                        q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
-                                                        q += chance*(1/3)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
-                                                    # 1/3 factor represents adversary's policy
+                                                        q += chance*(1/5)*gamma*prob*V[1 - player_id][raised+1][next_state]
+                                                        q += chance*(1/5)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
+                                                    # 1/5 factor represents 1/5 hands
                                                     # 1-player_id because we are switching player positions in the next round
                                             
                                             if a1 == 'raise':
@@ -232,9 +232,9 @@ class PolicyIterator():
                                                     raised += 1
 
                                                 if a2 == 'call':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[1-player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[1-player_id][raised+1][next_state]
                                                 # fold case is final and therefore ignored
                                             
                                             if a2 == 'check':
@@ -243,9 +243,9 @@ class PolicyIterator():
                                                     raised += 1
 
                                                 if a2 == 'check':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[1-player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[1-player_id][raised+1][next_state]
                                                 # fold case is final and therefore ignored
                                             
                                             raised = 0 # at the end, reset raised
@@ -270,7 +270,7 @@ class PolicyIterator():
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a2 == 'raise' or a2 == 'fold':
-                                        chance = chance / (0.5*a_prob[0] + a_prob[1] + a_prob[2] + 0.5*a_prob[3])
+                                        chance = chance / (0.08*a_prob[0] + a_prob[1] + a_prob[2] + 0.92*a_prob[3])
                                     elif a2 == 'check':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
 
@@ -286,15 +286,15 @@ class PolicyIterator():
                                                 
                                             if a1 == 'raise':
                                                 if a2 == 'call':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[player_id][raised+1][next_state]
                                                 if a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
 
                                             if a1 == 'check':
                                                 if a2 == 'call':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[player_id][raised+1][next_state]
                                                 if a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*prev_V[1 - player_id][raised+1][next_state]
 
 
                                             raised = 0 # at the end, reset raised
@@ -323,12 +323,13 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                     elif a == 'fold':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3]) # prob it is before p2's turn
-                                        chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
+                                        chance += (1-chance)*0.168* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
                                 elif player_id == self.P2:
                                     if a == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a == 'raise' or a == 'fold':
-                                        chance = chance / (0.5*a_prob[0] + a_prob[1] + a_prob[2] + 0.5*a_prob[3])
+                                        # there is a 16.8% chance stochastic p1 will raise
+                                        chance = chance / (0.168*a_prob[0] + a_prob[1] + a_prob[2] + 0.832*a_prob[3])
                                     elif a == 'check':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                 # game lasts two rounds, so no next state
@@ -374,7 +375,7 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                     elif a1 == 'fold':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3]) # prob it is before p2's turn
-                                        chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
+                                        chance += (1-chance)*0.08* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
 
                                 for next_state in range(len(self.P_next[s])):
                                     prob = self.P_next[s][next_state]
@@ -389,8 +390,7 @@ class PolicyIterator():
                                             
                                             if a1 == 'call':
                                                     if c2 in {'A', 'K'}:
-                                                        q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
-                                                    # 1/3 factor represents adversary's policy
+                                                        q += chance*(1/5)*gamma*prob*V[1 - player_id][raised+1][next_state]
                                                     # 1-player_id because we are switching player positions in the next round
                                             
                                             if a1 == 'raise':
@@ -399,9 +399,9 @@ class PolicyIterator():
                                                     raised += 1
 
                                                 if a2 == 'call':
-                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*V[1-player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[1-player_id][raised+1][next_state]
                                                 # fold case is final and therefore ignored
                                             
                                             if a2 == 'check':
@@ -410,9 +410,9 @@ class PolicyIterator():
                                                     raised += 1
 
                                                 if a2 == 'check':
-                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[player_id][raised+1][next_state]
                                                 elif a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*V[1-player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[1-player_id][raised+1][next_state]
                                                 # fold case is final and therefore ignored
                                             
                                             raised = 0 # at the end, reset raised
@@ -438,7 +438,7 @@ class PolicyIterator():
                                     if a2 == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a2 == 'raise' or a2 == 'fold':
-                                        chance = chance / (0.5*a_prob[0] + a_prob[1] + a_prob[2] + 0.5*a_prob[3])
+                                        chance = chance / (0.08*a_prob[0] + a_prob[1] + a_prob[2] + 0.92*a_prob[3])
                                     elif a2 == 'check':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
 
@@ -454,15 +454,15 @@ class PolicyIterator():
                                                 
                                             if a1 == 'raise':
                                                 if a2 == 'call':
-                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[player_id][raised+1][next_state]
                                                 if a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[1 - player_id][raised+1][next_state]
 
                                             if a1 == 'check':
                                                 if a2 == 'call':
-                                                    q += chance*(1/3)*gamma*prob*V[player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[player_id][raised+1][next_state]
                                                 if a2 == 'raise':
-                                                    q += chance*(1/3)*gamma*prob*V[1 - player_id][raised+1][next_state]
+                                                    q += chance*(1/5)*gamma*prob*V[1 - player_id][raised+1][next_state]
 
 
                                             raised = 0 # at the end, reset raised
@@ -492,12 +492,12 @@ class PolicyIterator():
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                     elif a == 'fold':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3]) # prob it is before p2's turn
-                                        chance += (1-chance)*(1/3)* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
+                                        chance += (1-chance)*0.168* a_prob[2]/(a_prob[0]+a_prob[2]) # + prob after p2 raises
                                 elif player_id == self.P2:
                                     if a == 'call':
                                         chance = chance / (a_prob[0] + a_prob[1] + a_prob[2])
                                     elif a == 'raise' or a == 'fold':
-                                        chance = chance / (0.5*a_prob[0] + a_prob[1] + a_prob[2] + 0.5*a_prob[3])
+                                        chance = chance / (0.168*a_prob[0] + a_prob[1] + a_prob[2] + 0.832*a_prob[3])
                                     elif a == 'check':
                                         chance = chance / (a_prob[1] + a_prob[2] + a_prob[3])
                                 # game lasts two rounds, so no next state
