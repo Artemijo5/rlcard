@@ -49,6 +49,8 @@ class PolicyIterator():
         # State Transition Probability Table
         # only needed for first round states - second round states are guaranteed final
         # gamma will need to be less than one, to account for the possibility of game ending at round 1
+        '''
+        # This is the one to account for hand cards in the state array.
         self.P_next = {
             0: { # First A
                 0 : 0.0, # First A
@@ -157,6 +159,120 @@ class PolicyIterator():
                 15: 0.0, # Triple J
                 16: 0.0, # First T
                 17: 0.64, # High T
+                18: 0.32, # Double T
+                19: 0.04 #Triple T
+            }
+        }
+        '''
+        # does not account for hand cards
+        self.P_next = {
+            0: { # First A
+                0 : 0.0, # First A
+                1 : 0.48, # High A
+                2 : 0.32, # Double A
+                3 : 0.04, # Triple A
+                4 : 0.0, # First K
+                5 : 0.0, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.0, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            4: { # First K
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.24, # High K
+                6 : 0.32, # Double K
+                7 : 0.04, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.0, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            8: { # First Q
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.16, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.08, # High Q
+                10: 0.32, # Double Q
+                11: 0.04, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            12: { # First J
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.16, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.08, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.32, # Double J
+                15: 0.04, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
+                18: 0.04, # Double T
+                19: 0.0 #Triple T
+            },
+            16: { # First T
+                0 : 0.0, # First A
+                1 : 0.24, # High A
+                2 : 0.04, # Double A
+                3 : 0.0, # Triple A
+                4 : 0.0, # First K
+                5 : 0.16, # High K
+                6 : 0.04, # Double K
+                7 : 0.0, # Triple K
+                8 : 0.0, # First Q
+                9 : 0.08, # High Q
+                10: 0.04, # Double Q
+                11: 0.0, # Triple Q
+                12: 0.0, # First J
+                13: 0.0, # High J
+                14: 0.04, # Double J
+                15: 0.0, # Triple J
+                16: 0.0, # First T
+                17: 0.0, # High T
                 18: 0.32, # Double T
                 19: 0.04 #Triple T
             }
@@ -605,18 +721,17 @@ class PolicyIterator():
 
         card_states = {'A': self.A_s, 'K': self.K_s, 'Q': self.Q_s, 'J': self.J_s, 'T': self.T_s}
 
-        card = card_states[hand]
+        
         if(len(table)==0):
+            card = card_states[hand]
             quant = self.FIRST_ROUND
         else:
             if(table[0]==hand or table[1]==hand):
+                card = card_states[hand]
                 if table[0] == table[1]:
                     quant = self.TRIPLE
                 else:
                     quant = self.DOUBLE
-            else:
-                quant = self.HIGH_CARD
-            '''
             elif(table[0] == table[1]):
                 card = card_states[table[0]]
                 quant = self.DOUBLE
@@ -628,7 +743,8 @@ class PolicyIterator():
                     card = card_states['K']
                 else:
                     card = card_states['Q']
-            '''
+            #else:
+            #    quant = self.HIGH_CARD
         
         return 4*card + quant
 
@@ -645,9 +761,6 @@ class PolicyIterator():
                     return 4*cards[hand] + quant['T']
                 else:
                     return 4*cards[hand] + quant['D']
-            else:
-                return 4*cards[hand] + quant['H']
-            '''
             elif(table[0]==table[1]):
                 return 4*cards[table[0]] + quant['D']
             else:
@@ -657,7 +770,8 @@ class PolicyIterator():
                     return 4*cards['K'] + quant['H']
                 else:
                     return 4*cards['Q'] + quant['H']
-            '''
+            #else:
+            #    return 4*cards[hand] + quant['H']
     
     def compareHands(self, hand1, hand2, table):
         '''Return 1 if hand 1 is higher, -1 if hand 2 is higher, 0 if hands are equal'''
