@@ -102,11 +102,11 @@ class PolicyIterator():
                 4 : 0.0, # First K
                 5 : 0.16, # High K
                 6 : 0.04, # Double K
-                7 : 0.04, # Triple K
+                7 : 0.0, # Triple K
                 8 : 0.0, # First Q
-                9 : 0.0, # High Q
-                10: 0.04, # Double Q
-                11: 0.0, # Triple Q
+                9 : 0.08, # High Q
+                10: 0.32, # Double Q
+                11: 0.04, # Triple Q
                 12: 0.0, # First J
                 13: 0.0, # High J
                 14: 0.04, # Double J
