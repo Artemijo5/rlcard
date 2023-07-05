@@ -619,7 +619,7 @@ class PolicyIterator():
                             one_zero = (not pol[a] in {0.45, 0.55})
                         if three_zeros:
                             pol = [0, 0, 0, 0]
-                            print(pid, ' ', raised, ' ', s, end = '\n')
+                            #print(pid, ' ', raised, ' ', s, end = '\n')
                             # adopt most careful strategy:
                             pol[0] = 0.45 # call secondary
                             pol[3] = 0.55 # check primary
