@@ -614,9 +614,9 @@ class PolicyIterator():
                         two_zeros = False
                         three_zeros = False
                         for a in range(4):
-                            three_zeros = (pol[a]==0.0 and two_zeros)
-                            two_zeros = (pol[a]==0.0 and one_zero)
-                            one_zero = (pol[a]==0.0)
+                            three_zeros = ((not pol[a] in {0.45, 0.55}) and two_zeros)
+                            two_zeros = ((not pol[a] in {0.45, 0.55}) and one_zero)
+                            one_zero = (not pol[a] in {0.45, 0.55})
                             one_zero = one_zero or (s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND)
                             one_zero = one_zero or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)
                         if three_zeros:
