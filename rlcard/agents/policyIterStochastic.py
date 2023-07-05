@@ -582,7 +582,7 @@ class PolicyIterator():
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
                     pol = self.policy[pid][raised][s]
-                    if(not ((s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND) or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)))):
+                    if(not ((s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND) or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND))):
                         # first, player1 case
                         action1 = 0
                         action2 = 0
@@ -617,8 +617,6 @@ class PolicyIterator():
                             three_zeros = ((not pol[a] in {0.45, 0.55}) and two_zeros)
                             two_zeros = ((not pol[a] in {0.45, 0.55}) and one_zero)
                             one_zero = (not pol[a] in {0.45, 0.55})
-                            one_zero = one_zero or (s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND)
-                            one_zero = one_zero or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)
                         if three_zeros:
                             pol = [0, 0, 0, 0]
                             print(pid, ' ', raised, ' ', s, end = '\n')
