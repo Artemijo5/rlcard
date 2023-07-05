@@ -593,16 +593,26 @@ class PolicyIterator():
                             action1 = np.max([pol[1], pol[2], pol[3]])
                             action2 = np.max([pol[0], pol[1], pol[2]])
                         have_given_primary = False
+                        have_given_primary_at_fold = False
                         have_given_secondary = False
+                        have_given_secondary_at_fold = False
                         for a in range(4):
                             old = pol[a]
                             pol[a] = 0
-                            if(old == action1 and not have_given_primary):
+                            if(old == action1 and (not have_given_primary or have_given_primary_at_fold)):
                                 pol[a] += 0.55
                                 have_given_primary = True
-                            if(old == action2 and not have_given_secondary):
+                                if have_given_primary_at_fold:
+                                    pol[2] = 0
+                                if a == 2: # fold
+                                    have_given_primary_at_fold = True
+                            if(old == action2 and (not have_given_secondary or have_given_secondary_at_fold)):
                                 pol[a] += 0.45
                                 have_given_secondary = True
+                                if have_given_secondary_at_fold:
+                                    pol[2] = 0
+                                if a == 2: # fold
+                                    have_given_secondary_at_fold = True
                     self.policy[pid][raised][s] = pol[:]
         self.deterministic = True
     
