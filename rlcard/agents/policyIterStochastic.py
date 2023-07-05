@@ -582,7 +582,7 @@ class PolicyIterator():
             for raised in range(4):
                 for s in range(self.POSSIBLE_STATES):
                     pol = self.policy[pid][raised][s]
-                    if(not np.sum(pol[:]) == 0):
+                    if(not ((s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND) or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)))):
                         # first, player1 case
                         action1 = 0
                         action2 = 0
