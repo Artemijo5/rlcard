@@ -773,22 +773,22 @@ class PolicyIterator():
                             action2 = self.getAdversaryAction_Sim(state2, ['call', 'raise', 'fold'])
                             # no immediate reward or loss, but adding this case for formality:
                             if action2 == 'fold':
-                                Pn2[state][action[action1]] = 1 + Pn2[state][action[action1]]
-                                Pr2[state][action[action1]] += tokens_in
+                                Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                Pr1[state][action[action1]] += tokens_in
                         elif action1 == 'check':
                             action2 = self.getAdversaryAction_Sim(state2, ['raise', 'fold', 'check'])
                             # no immediate reward or loss, but adding this case for formality:
                             if action2 == 'fold':
-                                Pn2[state][action[action1]] = 1 + Pn2[state][action[action1]]
-                                Pr2[state][action[action1]] += tokens_in
+                                Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                                Pr1[state][action[action1]] += tokens_in
                         elif action1 == 'call':
                             action2 = 'raise'
                             # no immediate reward or loss
-                        else:
+                        elif action1 == 'fold':
                             # immediate loss for folding
                             action2 = None
-                            Pn2[state][action[action1]] = 1 + Pn2[state][action[action1]]
-                            Pr2[state][action[action1]] -= tokens_in
+                            Pn1[state][action[action1]] = 1 + Pn1[state][action[action1]]
+                            Pr1[state][action[action1]] -= tokens_in
 
             # secondly, agent as player 2
             for hand1 in {'A', 'K', 'Q', 'J', 'T'}: # adversary
