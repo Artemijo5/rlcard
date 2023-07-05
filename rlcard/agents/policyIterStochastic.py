@@ -610,14 +610,17 @@ class PolicyIterator():
                                 have_given_secondary = True
                         # check that the array isn't all 0's, if so rectify:
                         # doesn't seem to do anything...
-                        all_zeros = True
+                        one_zero = False
+                        two_zeros = False
+                        three_zeros = False
                         for a in range(4):
-                            not_zero = (pol[a]!=0)
-                            not_zero = not_zero or (s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND)
-                            not_zero = not_zero or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)
-                            if not_zero:
-                                all_zeros = False
-                        if all_zeros:
+                            three_zeros = (pol[a]==0.0 and two_zeros)
+                            two_zeros = (pol[a]==0.0 and one_zero)
+                            one_zero = (pol[a]==0.0)
+                            one_zero = one_zero or (s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND)
+                            one_zero = one_zero or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)
+                        if three_zeros:
+                            pol = [0, 0, 0, 0]
                             print(raised, ' ', s, end = '\n')
                             # adopt most careful strategy:
                             pol[0] = 0.45 # call secondary
