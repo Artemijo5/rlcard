@@ -849,7 +849,7 @@ class PolicyIterator():
                                                     # there is a chance p1 had raised before
                                                     # win or lose 1 raised token, + a second raised token times that chance
                                                     Pn[0][t_index][state][action[action1]] = 1 + Pn[0][t_index][state][action[action1]]
-                                                    Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfFoldingFirst)*win
+                                                    Pr[0][t_index][state][action[action1]] += (tokens_in + chanceOfRaisingFirst)*win
                                         elif action1 == 'raise':
                                             action2 = self.getAdversaryAction_Sim(state1, ['call', 'raise', 'fold'])
                                             if(action2 == 'raise'):
