@@ -595,7 +595,6 @@ class PolicyIterator():
                         have_given_primary = False
                         have_given_primary_at_fold = False
                         have_given_secondary = False
-                        have_given_secondary_at_fold = False
                         for a in range(4):
                             old = pol[a]
                             pol[a] = 0
@@ -606,13 +605,6 @@ class PolicyIterator():
                                     pol[2] = 0
                                 if a == 2: # fold
                                     have_given_primary_at_fold = True
-                            if(old == action2 and (not have_given_secondary or have_given_secondary_at_fold)):
-                                pol[a] += 0.45
-                                have_given_secondary = True
-                                if have_given_secondary_at_fold:
-                                    pol[2] = 0
-                                if a == 2: # fold
-                                    have_given_secondary_at_fold = not have_given_primary_at_fold # can't do both ig
                         # check that the array isn't all 0's, if so rectify:
                         # doesn't seem to do anything...
                         all_zeros = True
