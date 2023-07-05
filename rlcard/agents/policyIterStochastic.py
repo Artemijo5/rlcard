@@ -530,7 +530,7 @@ class PolicyIterator():
             older_pi = old_pi.copy()
             old_pi = self.policy.copy()
             
-            self.fillInRewardTableRandom()
+            self.fillInRewardTableStochastic()
             V = self.policyEval(gamma, epsilon)   #evaluate latest policy --> you receive its converged value function
             self.policy = self.policyImprovement(V, gamma)          #get a better policy using the value function of the previous one just calculated 
             
@@ -731,7 +731,7 @@ class PolicyIterator():
         else:
             return -1        
 
-    def fillInRewardTableRandom(self):
+    def fillInRewardTableStochastic(self):
             init_policy = self.policy
             action = {'call': 0, 'raise': 1, 'fold': 2, 'check': 3}
             
