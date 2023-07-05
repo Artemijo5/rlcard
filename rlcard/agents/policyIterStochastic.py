@@ -612,7 +612,7 @@ class PolicyIterator():
                                 if have_given_secondary_at_fold:
                                     pol[2] = 0
                                 if a == 2: # fold
-                                    have_given_secondary_at_fold = True
+                                    have_given_secondary_at_fold = not have_given_primary_at_fold # can't do both ig
                         # check that the array isn't all 0's, if so rectify:
                         # doesn't seem to do anything...
                         all_zeros = True
