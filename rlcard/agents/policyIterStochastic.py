@@ -669,7 +669,7 @@ class PolicyIterator():
     
     def getAdversaryAction_Sim(self, s, legal_actions):
         # made to match our implementation of the stochastic adversary in limitholdem_rule_models.py
-        action = getAdversaryAction_base(s)
+        action = self.getAdversaryAction_base(s)
         if action in legal_actions:
             return action
         else:
@@ -687,7 +687,7 @@ class PolicyIterator():
     
     def getAdversaryAction(self, s):
         # made to match our implementation of the stochastic adversary in limitholdem_rule_models.py
-        action = getAdversaryAction_base(s)
+        action = self.getAdversaryAction_base(s)
 
         state = self.env.get_state(player_id)
         legal_actions = state['raw_legal_actions']
