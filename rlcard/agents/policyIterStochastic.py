@@ -614,6 +614,7 @@ class PolicyIterator():
                                 if a == 2: # fold
                                     have_given_secondary_at_fold = True
                         # check that the array isn't all 0's, if so rectify:
+                        # doesn't seem to do anything...
                         all_zeros = True
                         for a in range(4):
                             not_zero = (pol[a]!=0)
