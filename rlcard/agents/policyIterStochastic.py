@@ -616,9 +616,13 @@ class PolicyIterator():
                         # check that the array isn't all 0's, if so rectify:
                         all_zeros = True
                         for a in range(4):
-                            if pol[a] != 0 or ((s%4==self.FIRST_ROUND and raised != self.FIRST_ROUND) or (raised==self.FIRST_ROUND and s%4!=self.FIRST_ROUND)):
+                            not_zero = (pol[a]!=0)
+                            not_zero = not_zero or (s%4 == self.FIRST_ROUND and raised != self.FIRST_ROUND)
+                            not_zero = not_zero or (s%4 != self.FIRST_ROUND and raised == self.FIRST_ROUND)
+                            if not_zero:
                                 all_zeros = False
                         if all_zeros:
+                            print(raised, ' ', s, end = '\n')
                             # adopt most careful strategy:
                             pol[0] = 0.45 # call secondary
                             pol[3] = 0.55 # check primary
