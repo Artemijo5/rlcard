@@ -676,7 +676,7 @@ class PolicyIterator():
             if action == 'raise':
                 return 'call'
             if action == 'check':
-                if len(public_cards) == 0:
+                if s%4 == 0:
                     return 'call'
                 else:
                     return 'fold'
@@ -698,7 +698,7 @@ class PolicyIterator():
             if action == 'raise':
                 return 'call'
             if action == 'check':
-                if len(public_cards) == 0:
+                if s%4 == 0:
                     return 'call'
                 else:
                     return 'fold'
